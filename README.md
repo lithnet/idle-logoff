@@ -1,3 +1,4 @@
+![](https://github.com/lithnet/idle-logoff/wiki/images/logo_ex_small.png)
 # Lithnet Idle Logoff
 #### A group-policy enabled utility for logging off idle windows user sessions
 
