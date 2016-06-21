@@ -9,4 +9,4 @@ The Lithnet Idle Logoff tool is a simple utility that allows you to log off user
 
 The app simply queries the relevant Windows API for the time since the user last interacted with the computer, and calls the logoff function after the specified period has elapsed. 
 
-See the wiki for installation and configuration information
+See the [wiki](https://github.com/lithnet/idle-logoff/wiki) for installation and configuration information
