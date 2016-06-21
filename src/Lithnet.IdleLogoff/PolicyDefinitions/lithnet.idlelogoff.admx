@@ -1,0 +1,36 @@
+<policyDefinitions revision="1.0" schemaVersion="1.0">
+  <policyNamespaces>
+    <target prefix="fullarmor" namespace="FullArmor.Policies.C12E940B_470A_4FA7_B8FD_6A8973A69580" />
+    <using prefix="windows" namespace="Microsoft.Policies.Windows" />
+  </policyNamespaces>
+  <supersededAdm fileName="" />
+  <resources minRequiredRevision="1.0" />
+  <supportedOn>
+    <definitions>
+      <definition name="SUPPORTED_WindowsVISTA" displayName="$(string.SUPPORTED_WindowsVISTA)" />
+      <definition name="TS_SUPPORTED_WindowsXP" displayName="$(string.TS_SUPPORTED_WindowsXP)" />
+    </definitions>
+  </supportedOn>
+  <categories>
+    <category name="CAT_300017F2_090D_4E59_A535_01350C2E0428" displayName="$(string.CAT_300017F2_090D_4E59_A535_01350C2E0428)" />
+    <category name="CAT_78275968_599A_4E3F_BAD6_07C70894AF09" displayName="$(string.CAT_78275968_599A_4E3F_BAD6_07C70894AF09)">
+      <parentCategory ref="CAT_300017F2_090D_4E59_A535_01350C2E0428" />
+    </category>
+  </categories>
+  <policies>
+    <policy name="POL_978C1C26_0621_4860_A000_61A23A440151" class="Machine" displayName="$(string.POL_978C1C26_0621_4860_A000_61A23A440151)" presentation="$(presentation.POL_978C1C26_0621_4860_A000_61A23A440151)" key="Software\Policies\Lithnet\IdleLogoff" valueName="Enabled">
+      <parentCategory ref="CAT_78275968_599A_4E3F_BAD6_07C70894AF09" />
+      <supportedOn ref="TS_SUPPORTED_WindowsXP" />
+      <elements>
+        <decimal id="DXT_7E914D9D_203C_40DF_8C49_93B29308A6B2" key="Software\Policies\Lithnet\IdleLogoff" valueName="IdleLimit" minValue="1" />
+      </elements>
+    </policy>
+    <policy name="POL_1D519699-D182-4B28-A489-1F7DE9DB6DE5" class="User" displayName="$(string.POL_978C1C26_0621_4860_A000_61A23A440151)" presentation="$(presentation.POL_1D519699-D182-4B28-A489-1F7DE9DB6DE5)" key="Software\Policies\Lithnet\IdleLogoff" valueName="Enabled">
+      <parentCategory ref="CAT_78275968_599A_4E3F_BAD6_07C70894AF09" />
+      <supportedOn ref="TS_SUPPORTED_WindowsXP" />
+      <elements>
+        <decimal id="DXT_B29D2480-E131-4C23-B4D4-F55CAA13C2FF" key="Software\Policies\Lithnet\IdleLogoff" valueName="IdleLimit" minValue="1" />
+      </elements>
+    </policy>
+  </policies>
+</policyDefinitions>

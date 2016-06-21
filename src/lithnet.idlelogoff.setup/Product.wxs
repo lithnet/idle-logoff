@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+  <Product Id="*"
+           Name="Lithnet Idle Logoff Utility"
+           Language="1033"
+           Version="1.1.6010"
+           Manufacturer="Lithnet"
+           UpgradeCode="0155695D-B6EF-43E8-8D77-D14FC6232668">
+
+    <Package InstallerVersion="200"
+             Compressed="yes"
+             InstallScope="perMachine"
+             InstallPrivileges="elevated"
+             Manufacturer="Lithnet"
+             Platform="x86"/>
+
+    <MajorUpgrade
+       Schedule="afterInstallExecute"
+      DowngradeErrorMessage="A newer version of [ProductName] is already installed."
+      AllowSameVersionUpgrades="yes"/>
+
+    <Media Id="1" Cabinet="Cab1.cab" EmbedCab="yes" />
+
+    <!-- Prerequisites -->
+
+    <PropertyRef Id="WIX_IS_NETFRAMEWORK_45_OR_LATER_INSTALLED" />
+    <PropertyRef Id="NETFRAMEWORK40FULLINSTALLROOTDIR" />
+
+    <Condition Message="This application requires .NET Framework 4.5. Please install the .NET Framework then run this installer again">
+      <![CDATA[Installed OR WIX_IS_NETFRAMEWORK_45_OR_LATER_INSTALLED]]>
+    </Condition>
+
+    <!-- Installation Paths -->
+
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFilesFolder">
+        <Directory Id="LITHNETROOT" Name ="Lithnet">
+          <Directory Id="INSTALLFOLDER" Name="IdleLogoff" />
+        </Directory>
+      </Directory>
+      <Directory Id="WindowsFolder">
+        <Directory Id="POLICYFOLDER" Name="PolicyDefinitions">
+          <Directory Id="POLICYFOLDERLOCALIZATIONS" Name="en-US"/>
+        </Directory>
+      </Directory>
+    </Directory>
+
+    <UI>
+      <UIRef Id="WixUI_Common" />
+      <Property Id="WixUI_Mode" Value="Custom" />
+
+      <TextStyle Id="WixUI_Font_Normal" FaceName="Tahoma" Size="8" />
+      <TextStyle Id="WixUI_Font_Bigger" FaceName="Tahoma" Size="9" Bold="yes" />
+      <TextStyle Id="WixUI_Font_Title"  FaceName="Tahoma" Size="9" Bold="yes" />
+
+      <Property Id="DefaultUIFont" Value="WixUI_Font_Normal" />
+      <DialogRef Id="ProgressDlg" />
+      <DialogRef Id="ErrorDlg" />
+      <DialogRef Id="FilesInUse" />
+      <DialogRef Id="FatalError" />
+      <DialogRef Id="UserExit" />
+
+      <Publish Dialog="ExitDialog" Control="Finish" Event="EndDialog" Value="Return" Order="999">1</Publish>
+      <Publish Dialog="WelcomeDlg" Control="Next" Event="EndDialog" Value="Return" Order="2"></Publish>
+
+    </UI>
+
+    <!-- Features -->
+
+    <Feature Id="App" Title="Lithnet Idle Logoff" Level="1">
+      <ComponentGroupRef Id="Application" />
+      <ComponentGroupRef Id="GPOExtensions" />
+    </Feature>
+
+    <ComponentGroup Id="Application" Directory="INSTALLFOLDER">
+      <Component Id="cmp786406bba783436eaa0b61b29f39b0fc" Guid="*">
+        <File Id="filb65faa778a724532ab139ad02cae821e" KeyPath="yes" Source="$(var.lithnet.idlelogoff.TargetDir)\Lithnet.IdleLogoff.exe" />
+        <util:EventSource Log="Application" Name="Lithnet.idlelogoff" EventMessageFile="[NETFRAMEWORK40FULLINSTALLROOTDIR]EventLogMessages.dll"/>
+      </Component>
+      <Component Id="RegistryEntries" Guid="*">
+        <RegistryKey Root="HKLM"
+                     Key="Software\Microsoft\Windows\CurrentVersion\Run">
+          <RegistryValue Type="string" Name="lithnet.idlelogoff.exe" Value="&quot;[INSTALLFOLDER]lithnet.idlelogoff.exe&quot; /start" KeyPath="yes"/>
+        </RegistryKey>
+      </Component>
+    </ComponentGroup>
+
+    <ComponentGroup Id="GPOExtensions">
+      <Component Id="cmpe8a33605d8a743f9a7b4f5a014e6743d" Guid="*" Directory="POLICYFOLDER" >
+        <File Id="fil519039dc183141089783e1c694d21845" KeyPath="yes" Source="$(var.lithnet.idlelogoff.TargetDir)\PolicyDefinitions\lithnet.idlelogoff.admx" />
+      </Component>
+      <Component Id="cmp37b03735f0fa4678bbe3298d319df81a" Guid="*" Directory="POLICYFOLDERLOCALIZATIONS" >
+        <File Id="file1cb72b2e9d14cb183778caa43dd2efe" KeyPath="yes" Source="$(var.lithnet.idlelogoff.TargetDir)\PolicyDefinitions\en-US\lithnet.idlelogoff.adml" />
+      </Component>
+    </ComponentGroup>
+  </Product>
+</Wix>

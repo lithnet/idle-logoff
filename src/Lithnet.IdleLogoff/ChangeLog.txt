@@ -1,0 +1,6 @@
+﻿25/11/2014		1.0.5442
+Added support for user-based group policy settings
+
+25/2/2012		1.0.4438
+Fixed an issue where the program would terminate if the event log on the computer was full
+
