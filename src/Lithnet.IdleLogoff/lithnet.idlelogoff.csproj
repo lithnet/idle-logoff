@@ -99,6 +99,7 @@
   <ItemGroup>
     <Compile Include="AdminCheck.cs" />
     <Compile Include="EventLogging.cs" />
+    <Compile Include="ExecutionState.cs" />
     <Compile Include="frmSettings.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -111,15 +112,18 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="ShutdownFlags.cs" />
+    <Compile Include="PowerInformationLevel.cs" />
     <EmbeddedResource Include="frmSettings.resx">
       <DependentUpon>frmSettings.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
     <Content Include="PolicyDefinitions\en-US\lithnet.idlelogoff.adml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <None Include="PolicyDefinitions\lithnet.idlelogoff.admx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </None>
     <None Include="Properties\app.manifest" />
   </ItemGroup>
@@ -139,12 +143,6 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="ChangeLog.txt" />
-    <Content Include="PolicyDefinitions\ADMX Backup.xml">
-      <SubType>Designer</SubType>
-    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

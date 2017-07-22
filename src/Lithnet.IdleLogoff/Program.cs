@@ -11,7 +11,6 @@
         private static Timer eventTimer;
         private static bool inTimer = false;
         private static bool backgroundMode = false;
-        private static bool debug = false;
         private static int initialTime = 0;
 
         [STAThread]
@@ -19,11 +18,6 @@
         {
             try
             {
-                if (Debugger.IsAttached)
-                {
-                    debug = true;
-                }
-
                 EventLogging.InitEventLog();
                 ValidateCommandLineArgs();
 
@@ -94,6 +88,10 @@
                 {
                     backgroundMode = true;
                 }
+                else if (arg.ToLower() == "/attach")
+                {
+                    System.Diagnostics.Debugger.Launch();
+                }
                 else
                 {
                     MessageBox.Show("An invalid command line argument was specified: " + arg);
@@ -125,12 +123,23 @@
                 if (initialTime != logoffidletime)
                 {
                     EventLogging.TryLogEvent($"Idle timeout limit has changed. User {Environment.UserDomainName}\\{Environment.UserName} will now be logged off after {Settings.IdleLimit} minutes", EventLogging.EVT_TIMERINTERVALCHANGED);
+                    initialTime = logoffidletime;
                 }
 
                 int currentticks = NativeMethods.GetLastInputTime();
 
+                if (!Settings.IgnoreDisplayRequested && NativeMethods.IsDisplayRequested())
+                {
+                    Trace.WriteLine("An application has requested the system display stay on");
+                    Program.lastDateTime = DateTime.Now;
+                    Program.lastTicks = currentticks;
+                    return;
+                }
+
+
                 if (currentticks != Program.lastTicks)
                 {
+                    Trace.WriteLine("Input received");
                     Program.lastTicks = currentticks;
                     Program.lastDateTime = DateTime.Now;
                     return;
@@ -138,9 +147,9 @@
 
                 if (DateTime.Now.Subtract(Program.lastDateTime).TotalMilliseconds > logoffidletime)
                 {
-                    EventLogging.TryLogEvent($"User {Environment.UserName} has passed the idle time limit of {Settings.IdleLimit} minutes. Initating logoff.", EventLogging.EVT_LOGOFFEVENT);
+                    EventLogging.TryLogEvent($"User {Environment.UserName} has passed the idle time limit of {Settings.IdleLimit} minutes. Initiating logoff.", EventLogging.EVT_LOGOFFEVENT);
 
-                    if (!debug)
+                    if (!Settings.Debug)
                     {
                         try
                         {
@@ -151,7 +160,7 @@
                         }
                         catch (Exception ex)
                         {
-                            EventLogging.TryLogEvent("An error occured trying to log off the user\n" + ex.Message, EventLogging.EVT_LOGOFFFAILED);
+                            EventLogging.TryLogEvent("An error occurred trying to log off the user\n" + ex.Message, EventLogging.EVT_LOGOFFFAILED);
                         }
                     }
                     else

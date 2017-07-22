@@ -37,13 +37,14 @@
             this.lbProductVersion = new System.Windows.Forms.Label();
             this.lbGPControlled = new System.Windows.Forms.Label();
             this.lbHiddenRefresh = new System.Windows.Forms.Label();
+            this.ckIgnoreDisplayRequested = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.udMinutes)).BeginInit();
             this.SuspendLayout();
             // 
             // ckEnableIdleLogoff
             // 
             this.ckEnableIdleLogoff.AutoSize = true;
-            this.ckEnableIdleLogoff.Location = new System.Drawing.Point(100, 54);
+            this.ckEnableIdleLogoff.Location = new System.Drawing.Point(100, 40);
             this.ckEnableIdleLogoff.Name = "ckEnableIdleLogoff";
             this.ckEnableIdleLogoff.Size = new System.Drawing.Size(118, 17);
             this.ckEnableIdleLogoff.TabIndex = 0;
@@ -52,7 +53,7 @@
             // 
             // udMinutes
             // 
-            this.udMinutes.Location = new System.Drawing.Point(227, 72);
+            this.udMinutes.Location = new System.Drawing.Point(227, 58);
             this.udMinutes.Maximum = new decimal(new int[] {
             35791,
             0,
@@ -75,7 +76,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(97, 74);
+            this.label1.Location = new System.Drawing.Point(97, 60);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(124, 13);
             this.label1.TabIndex = 2;
@@ -137,6 +138,15 @@
             this.lbHiddenRefresh.TabIndex = 7;
             this.lbHiddenRefresh.Click += new System.EventHandler(this.lbHiddenRefresh_Click);
             // 
+            // ckIgnoreDisplayRequested
+            // 
+            this.ckIgnoreDisplayRequested.Location = new System.Drawing.Point(100, 88);
+            this.ckIgnoreDisplayRequested.Name = "ckIgnoreDisplayRequested";
+            this.ckIgnoreDisplayRequested.Size = new System.Drawing.Size(315, 34);
+            this.ckIgnoreDisplayRequested.TabIndex = 8;
+            this.ckIgnoreDisplayRequested.Text = "Ignore sleep prevention requests from applications such as media playback";
+            this.ckIgnoreDisplayRequested.UseVisualStyleBackColor = true;
+            // 
             // frmSettings
             // 
             this.AcceptButton = this.btOK;
@@ -144,6 +154,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btCancel;
             this.ClientSize = new System.Drawing.Size(427, 178);
+            this.Controls.Add(this.ckIgnoreDisplayRequested);
             this.Controls.Add(this.lbHiddenRefresh);
             this.Controls.Add(this.lbGPControlled);
             this.Controls.Add(this.lbProductVersion);
@@ -177,5 +188,6 @@
         private System.Windows.Forms.Label lbProductVersion;
         private System.Windows.Forms.Label lbGPControlled;
         private System.Windows.Forms.Label lbHiddenRefresh;
+        private System.Windows.Forms.CheckBox ckIgnoreDisplayRequested;
     }
 }

@@ -23,6 +23,14 @@
       <supportedOn ref="TS_SUPPORTED_WindowsXP" />
       <elements>
         <decimal id="DXT_7E914D9D_203C_40DF_8C49_93B29308A6B2" key="Software\Policies\Lithnet\IdleLogoff" valueName="IdleLimit" minValue="1" />
+        <boolean id="DXT_B357DAA7-0013-45D9-94DC-E91206837C29" key="Software\Policies\Lithnet\IdleLogoff" valueName="IgnoreDisplayRequested">
+          <trueValue>
+            <decimal value="1" />
+          </trueValue>
+          <falseValue>
+            <decimal value="0" />
+          </falseValue>
+        </boolean>
       </elements>
     </policy>
     <policy name="POL_1D519699-D182-4B28-A489-1F7DE9DB6DE5" class="User" displayName="$(string.POL_978C1C26_0621_4860_A000_61A23A440151)" presentation="$(presentation.POL_1D519699-D182-4B28-A489-1F7DE9DB6DE5)" key="Software\Policies\Lithnet\IdleLogoff" valueName="Enabled">
@@ -30,7 +38,14 @@
       <supportedOn ref="TS_SUPPORTED_WindowsXP" />
       <elements>
         <decimal id="DXT_B29D2480-E131-4C23-B4D4-F55CAA13C2FF" key="Software\Policies\Lithnet\IdleLogoff" valueName="IdleLimit" minValue="1" />
-      </elements>
+        <boolean id="DXT_CFF2EAC7-2034-47F9-B3CE-8D10C73FCA81" key="Software\Policies\Lithnet\IdleLogoff" valueName="IgnoreDisplayRequested">
+          <trueValue>
+            <decimal value="1" />
+          </trueValue>
+          <falseValue>
+            <decimal value="0" />
+          </falseValue>
+        </boolean> </elements>
     </policy>
   </policies>
 </policyDefinitions>

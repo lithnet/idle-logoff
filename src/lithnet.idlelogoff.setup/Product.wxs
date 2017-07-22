@@ -4,7 +4,7 @@
   <Product Id="*"
            Name="Lithnet Idle Logoff Utility"
            Language="1033"
-           Version="1.1.6016"
+           Version="!(bind.FileVersion.filb65faa778a724532ab139ad02cae821e)"
            Manufacturer="Lithnet"
            UpgradeCode="0155695D-B6EF-43E8-8D77-D14FC6232668">
 

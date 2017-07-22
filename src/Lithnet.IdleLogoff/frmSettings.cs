@@ -23,11 +23,10 @@ namespace Lithnet.idlelogoff
             lbProductVersion.Text = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString(3);
 
             ckEnableIdleLogoff.Checked = Settings.Enabled;
+            ckEnableIdleLogoff.Enabled = !Settings.IsSettingFromPolicy(nameof(Settings.Enabled));
 
-            if (Settings.IsSettingFromPolicy("Enabled"))
-                ckEnableIdleLogoff.Enabled = false;
-            else
-                ckEnableIdleLogoff.Enabled = true;
+            ckIgnoreDisplayRequested.Checked = Settings.IgnoreDisplayRequested;
+            ckIgnoreDisplayRequested.Enabled = !Settings.IsSettingFromPolicy(nameof(Settings.IgnoreDisplayRequested));
 
             try
             {
@@ -38,14 +37,12 @@ namespace Lithnet.idlelogoff
                 udMinutes.Value = 60;
             }
 
-            if (Settings.IsSettingFromPolicy("IdleLimit"))
-                udMinutes.Enabled = false;
-            else
-                udMinutes.Enabled = true;
+            udMinutes.Enabled = !Settings.IsSettingFromPolicy(nameof(Settings.IdleLimit));
 
-            if ((!udMinutes.Enabled) | (!ckEnableIdleLogoff.Enabled))
+            if (!udMinutes.Enabled | !ckEnableIdleLogoff.Enabled | !ckIgnoreDisplayRequested.Enabled)
+            {
                 lbGPControlled.Visible = true;
-            
+            }
         }
 
         private void btOK_Click(object sender, EventArgs e)
@@ -53,14 +50,23 @@ namespace Lithnet.idlelogoff
             try
             {
                 if (ckEnableIdleLogoff.Enabled)
+                {
                     Settings.Enabled = ckEnableIdleLogoff.Checked;
+                }
 
                 if (udMinutes.Enabled)
-                    Settings.IdleLimit = (int)udMinutes.Value;
+                {
+                    Settings.IdleLimit = (int) udMinutes.Value;
+                }
+
+                if (ckIgnoreDisplayRequested.Enabled)
+                {
+                    Settings.IgnoreDisplayRequested = ckIgnoreDisplayRequested.Checked;
+                }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("An unexpected error occured when trying to save the settings.\n\n" + ex.Message);
+                MessageBox.Show("An unexpected error occurred when trying to save the settings.\n\n" + ex);
             }
 
             if (!EventLogging.IsEventSourceRegistered())
@@ -71,7 +77,7 @@ namespace Lithnet.idlelogoff
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("An error occured registering the event source. Event log messages will not be logged for application events\n\n" + ex.Message);
+                    MessageBox.Show("An error occurred registering the event source. Event log messages will not be logged for application events\n\n" + ex.Message);
                 }
             }
 
@@ -81,14 +87,14 @@ namespace Lithnet.idlelogoff
             }
             catch (Exception ex)
             {
-                MessageBox.Show("An error occured while configuring the tool to automatically run at logon. The tool must be started with the '/start' switch for each user that logs on to take effect\n\n" + ex.Message);
+                MessageBox.Show("An error occurred while configuring the tool to automatically run at logon. The tool must be started with the '/start' switch for each user that logs on to take effect\n\n" + ex.Message);
             }
 
             Environment.Exit(0);
 
         }
 
-        private void lbHiddenRefresh_Click(object sender, EventArgs e) 
+        private void lbHiddenRefresh_Click(object sender, EventArgs e)
         {
             RefreshUI();
         }
@@ -97,7 +103,5 @@ namespace Lithnet.idlelogoff
         {
             Environment.Exit(0);
         }
-
-             
     }
 }

@@ -11,6 +11,7 @@ namespace Lithnet.idlelogoff
         private static string strBaseSettingsKey = "Software\\Lithnet\\IdleLogOff";
         private static string strBasePolicyKey = "Software\\Policies\\Lithnet\\IdleLogOff";
         private static RegistryKey _regkeySettings;
+        private static RegistryKey _regkeySettingsWritable;
         private static RegistryKey _regkeyMachinePolicy;
         private static RegistryKey _regkeyUserPolicy;
 
@@ -52,19 +53,20 @@ namespace Lithnet.idlelogoff
                 try
                 {
 
-                    if (_regkeySettings == null)
+                    if (_regkeySettingsWritable == null)
                     {
-                        _regkeySettings = Registry.LocalMachine.CreateSubKey(strBaseSettingsKey);
+
+                        _regkeySettingsWritable = Registry.LocalMachine.CreateSubKey(strBaseSettingsKey);
                     }
                     else
                     {
                         try
                         {
-                            int x = _regkeySettings.ValueCount;
+                            int x = _regkeySettingsWritable.ValueCount;
                         }
                         catch // catch handler for a key that is missing and no longer valid
                         {
-                            _regkeySettings = Registry.LocalMachine.CreateSubKey(strBaseSettingsKey);
+                            _regkeySettingsWritable = Registry.LocalMachine.CreateSubKey(strBaseSettingsKey);
                         }
                     }
                 }
@@ -73,7 +75,7 @@ namespace Lithnet.idlelogoff
                     // could not open registry key
                 }
 
-                return _regkeySettings;
+                return _regkeySettingsWritable;
 
             }
 
@@ -223,6 +225,39 @@ namespace Lithnet.idlelogoff
             }
         }
 
+        public static bool Debug
+        {
+            get
+            {
+                if (System.Diagnostics.Debugger.IsAttached)
+                {
+                    return true;
+                }
+
+                object value = null;
+                bool status = false;
+
+                value = GetSetting("Debug");
+                if (value != null)
+                {
+                    try
+                    {
+                        if ((int) value == 1)
+                        {
+                            status = true;
+                        }
+                    }
+                    catch
+                    {
+                        //unable to cast 
+                    }
+
+                }
+
+                return status;
+            }
+        }
+
         public static bool Enabled
         {
             get
@@ -253,6 +288,38 @@ namespace Lithnet.idlelogoff
                 SaveSetting("Enabled", Convert.ToInt32(value), RegistryValueKind.DWord);
             }
         }
+
+        public static bool IgnoreDisplayRequested
+        {
+            get
+            {
+                object value = null;
+                bool status = false;
+
+                value = GetPolicyOrSetting("IgnoreDisplayRequested");
+                if (value != null)
+                {
+                    try
+                    {
+                        if ((int)value == 1)
+                        {
+                            status = true;
+                        }
+                    }
+                    catch
+                    {
+                        //unable to cast 
+                    }
+
+                }
+                return status;
+            }
+            set
+            {
+                SaveSetting("IgnoreDisplayRequested", Convert.ToInt32(value), RegistryValueKind.DWord);
+            }
+        }
+
 
         public static void Release()
         {

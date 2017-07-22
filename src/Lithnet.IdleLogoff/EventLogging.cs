@@ -77,6 +77,7 @@
 
         public static void LogEvent(string eventText, int eventID, EventLogEntryType entryType)
         {
+            Trace.WriteLine($"{entryType}: {eventID}: {eventText}");
             if (LogEnabled)
             {
                 EventLog.WriteEntry(evtSource, eventText, entryType, eventID);

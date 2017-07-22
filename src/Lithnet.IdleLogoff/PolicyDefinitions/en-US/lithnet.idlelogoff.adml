@@ -14,9 +14,11 @@
     <presentationTable>
       <presentation id="POL_978C1C26_0621_4860_A000_61A23A440151">
         <decimalTextBox refId="DXT_7E914D9D_203C_40DF_8C49_93B29308A6B2" defaultValue="60">Idle timeout (minutes)</decimalTextBox>
+        <checkBox refId="DXT_B357DAA7-0013-45D9-94DC-E91206837C29" defaultChecked="false">Ignore sleep prevention requests from applications such as media playback</checkBox>
       </presentation>
       <presentation id="POL_1D519699-D182-4B28-A489-1F7DE9DB6DE5">
         <decimalTextBox refId="DXT_B29D2480-E131-4C23-B4D4-F55CAA13C2FF" defaultValue="60">Idle timeout (minutes)</decimalTextBox>
+        <checkBox refId="DXT_CFF2EAC7-2034-47F9-B3CE-8D10C73FCA81" defaultChecked="false">Ignore sleep prevention requests from applications such as media playback</checkBox>
       </presentation>
     </presentationTable>
   </resources>

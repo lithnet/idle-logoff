@@ -15,6 +15,12 @@ namespace Lithnet.idlelogoff
             startInfo.UseShellExecute = true;
             startInfo.WorkingDirectory = Environment.CurrentDirectory;
             startInfo.FileName = Application.ExecutablePath;
+
+            if (System.Diagnostics.Debugger.IsAttached)
+            {
+                startInfo.Arguments = "/attach";
+            }
+
             startInfo.Verb = "runas";
             userCanceled = false;
 
