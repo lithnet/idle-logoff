@@ -38,6 +38,8 @@
             this.lbGPControlled = new System.Windows.Forms.Label();
             this.lbHiddenRefresh = new System.Windows.Forms.Label();
             this.ckIgnoreDisplayRequested = new System.Windows.Forms.CheckBox();
+            this.cbAction = new System.Windows.Forms.ComboBox();
+            this.label2 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.udMinutes)).BeginInit();
             this.SuspendLayout();
             // 
@@ -84,7 +86,7 @@
             // 
             // btOK
             // 
-            this.btOK.Location = new System.Drawing.Point(344, 142);
+            this.btOK.Location = new System.Drawing.Point(344, 181);
             this.btOK.Name = "btOK";
             this.btOK.Size = new System.Drawing.Size(71, 24);
             this.btOK.TabIndex = 4;
@@ -95,7 +97,7 @@
             // btCancel
             // 
             this.btCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btCancel.Location = new System.Drawing.Point(267, 142);
+            this.btCancel.Location = new System.Drawing.Point(267, 181);
             this.btCancel.Name = "btCancel";
             this.btCancel.Size = new System.Drawing.Size(71, 24);
             this.btCancel.TabIndex = 3;
@@ -106,7 +108,7 @@
             // lbProductName
             // 
             this.lbProductName.AutoSize = true;
-            this.lbProductName.Location = new System.Drawing.Point(7, 144);
+            this.lbProductName.Location = new System.Drawing.Point(7, 183);
             this.lbProductName.Name = "lbProductName";
             this.lbProductName.Size = new System.Drawing.Size(99, 13);
             this.lbProductName.TabIndex = 4;
@@ -114,7 +116,7 @@
             // 
             // lbProductVersion
             // 
-            this.lbProductVersion.Location = new System.Drawing.Point(6, 158);
+            this.lbProductVersion.Location = new System.Drawing.Point(7, 196);
             this.lbProductVersion.Name = "lbProductVersion";
             this.lbProductVersion.Size = new System.Drawing.Size(119, 13);
             this.lbProductVersion.TabIndex = 5;
@@ -147,13 +149,33 @@
             this.ckIgnoreDisplayRequested.Text = "Ignore sleep prevention requests from applications such as media playback";
             this.ckIgnoreDisplayRequested.UseVisualStyleBackColor = true;
             // 
+            // cbAction
+            // 
+            this.cbAction.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbAction.FormattingEnabled = true;
+            this.cbAction.Location = new System.Drawing.Point(154, 131);
+            this.cbAction.Name = "cbAction";
+            this.cbAction.Size = new System.Drawing.Size(166, 21);
+            this.cbAction.TabIndex = 10;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(97, 131);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(40, 13);
+            this.label2.TabIndex = 11;
+            this.label2.Text = "Action";
+            // 
             // frmSettings
             // 
             this.AcceptButton = this.btOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btCancel;
-            this.ClientSize = new System.Drawing.Size(427, 178);
+            this.ClientSize = new System.Drawing.Size(427, 217);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.cbAction);
             this.Controls.Add(this.ckIgnoreDisplayRequested);
             this.Controls.Add(this.lbHiddenRefresh);
             this.Controls.Add(this.lbGPControlled);
@@ -189,5 +211,7 @@
         private System.Windows.Forms.Label lbGPControlled;
         private System.Windows.Forms.Label lbHiddenRefresh;
         private System.Windows.Forms.CheckBox ckIgnoreDisplayRequested;
+        private System.Windows.Forms.ComboBox cbAction;
+        private System.Windows.Forms.Label label2;
     }
 }

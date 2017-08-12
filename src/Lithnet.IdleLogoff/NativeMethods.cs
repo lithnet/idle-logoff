@@ -6,6 +6,11 @@ namespace Lithnet.idlelogoff
 {
     public class NativeMethods
     {
+        internal const int SE_PRIVILEGE_ENABLED = 0x00000002;
+        internal const int TOKEN_QUERY = 0x00000008;
+        internal const int TOKEN_ADJUST_PRIVILEGES = 0x00000020;
+        internal const string SE_SHUTDOWN_NAME = "SeShutdownPrivilege";
+
         [DllImport("powrprof.dll")]
         private static extern int CallNtPowerInformation(
             POWER_INFORMATION_LEVEL informationLevel,
@@ -15,11 +20,27 @@ namespace Lithnet.idlelogoff
             int nOutputBufferSize
         );
 
+
+        [DllImport("kernel32.dll")]
+        private static extern IntPtr GetCurrentProcess();
+
+        [DllImport("advapi32.dll", SetLastError = true)]
+        private static extern int OpenProcessToken(IntPtr processHandle, int desiredAccess, ref IntPtr tokenHandle);
+
+        [DllImport("advapi32.dll", SetLastError = true)]
+        private static extern int LookupPrivilegeValue(string systemName, string name, ref long luid);
+
+        [DllImport("advapi32.dll", SetLastError = true)]
+        private static extern int AdjustTokenPrivileges(IntPtr tokenHandle, bool disableAllPrivileges, ref TokenPrivileges newState, int bufferLength, IntPtr previousState, IntPtr length);
+
         [DllImport("User32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         private static extern bool GetLastInputInfo(ref LastInputInfo lastInputInfo);
 
         [DllImport("User32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         private static extern bool ExitWindowsEx(ShutdownFlags flags, int reason);
+
+        [DllImport("kernel32", SetLastError = true)]
+        private static extern bool CloseHandle(IntPtr handle);
 
         public static bool IsDisplayRequested()
         {
@@ -50,11 +71,82 @@ namespace Lithnet.idlelogoff
 
         public static void LogOffUser()
         {
-            ShutdownFlags flags = ShutdownFlags.Logoff | ShutdownFlags.Force;
-            
+            ShutdownFlags flags;
+            bool elevated = false;
+
+            if (Settings.Action == IdleTimeoutAction.Reboot || Settings.Action == IdleTimeoutAction.Shutdown)
+            {
+                try
+                {
+                    ElevatePrivileges();
+                    elevated = true;
+                }
+                catch (Exception ex)
+                {
+                    EventLogging.TryLogEvent($"Could not get workstation shutdown permissions. Logging off instead\n{ex}", EventLogging.EVT_RESTARTFAILED, System.Diagnostics.EventLogEntryType.Error);
+                }
+            }
+
+            if (elevated && Settings.Action == IdleTimeoutAction.Shutdown)
+            {
+                flags = ShutdownFlags.Shutdown | ShutdownFlags.Force;
+            }
+            else if (elevated && Settings.Action == IdleTimeoutAction.Reboot)
+            {
+                flags = ShutdownFlags.Reboot | ShutdownFlags.Force;
+            }
+            else            {
+                flags = ShutdownFlags.Logoff | ShutdownFlags.Force;
+            }
+
             if (!ExitWindowsEx(flags, 0))
             {
                 throw new Win32Exception(Marshal.GetLastWin32Error());
+            }
+        }
+
+        private static void ElevatePrivileges()
+        {
+            IntPtr currentProcess = GetCurrentProcess();
+            IntPtr tokenHandle = IntPtr.Zero;
+
+            try
+            {
+                int result = OpenProcessToken(currentProcess, TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, ref tokenHandle);
+
+                if (result == 0)
+                {
+                    throw new Win32Exception(Marshal.GetLastWin32Error());
+                }
+
+                TokenPrivileges tokenPrivileges;
+                tokenPrivileges.PrivilegeCount = 1;
+                tokenPrivileges.Luid = 0;
+                tokenPrivileges.Attributes = SE_PRIVILEGE_ENABLED;
+
+                result = LookupPrivilegeValue(null, SE_SHUTDOWN_NAME, ref tokenPrivileges.Luid);
+                if (result == 0)
+                {
+                    throw new Win32Exception(Marshal.GetLastWin32Error());
+                }
+
+                result = AdjustTokenPrivileges(tokenHandle, false, ref tokenPrivileges, 0, IntPtr.Zero, IntPtr.Zero);
+                if (result == 0)
+                {
+                    throw new Win32Exception(Marshal.GetLastWin32Error());
+                }
+            }
+            finally
+            {
+                if (currentProcess != IntPtr.Zero)
+                {
+                    CloseHandle(currentProcess);
+                }
+
+                if (tokenHandle != IntPtr.Zero)
+                {
+                    CloseHandle(tokenHandle);
+                }
             }
         }
     }

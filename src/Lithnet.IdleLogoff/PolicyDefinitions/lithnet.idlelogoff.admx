@@ -31,6 +31,23 @@
             <decimal value="0" />
           </falseValue>
         </boolean>
+        <enum id="DXT_3E1833A6-D761-40B5-8BF9-5C03F320C86B" key="Software\Policies\Lithnet\IdleLogoff" valueName="Action">
+          <item displayName="$(string.POL_F3930A2B-33F8-4CE6-B6AC-14F188507B77)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+          <item displayName="$(string.POL_D61A5346-B53C-42FB-99FF-6519F18B281C)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+          <item displayName="$(string.POL_582D5654-4165-42D2-BF83-6A182FF67587)">
+            <value>
+              <decimal value="2" />
+            </value>
+          </item>
+        </enum>
       </elements>
     </policy>
     <policy name="POL_1D519699-D182-4B28-A489-1F7DE9DB6DE5" class="User" displayName="$(string.POL_978C1C26_0621_4860_A000_61A23A440151)" presentation="$(presentation.POL_1D519699-D182-4B28-A489-1F7DE9DB6DE5)" key="Software\Policies\Lithnet\IdleLogoff" valueName="Enabled">
@@ -45,7 +62,25 @@
           <falseValue>
             <decimal value="0" />
           </falseValue>
-        </boolean> </elements>
+        </boolean>
+        <enum id="DXT_6C79F5D5-6DB7-4194-BCB5-7CF6752263EA" key="Software\Policies\Lithnet\IdleLogoff" valueName="Action">
+          <item displayName="$(string.POL_F3930A2B-33F8-4CE6-B6AC-14F188507B77)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+          <item displayName="$(string.POL_D61A5346-B53C-42FB-99FF-6519F18B281C)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+          <item displayName="$(string.POL_582D5654-4165-42D2-BF83-6A182FF67587)">
+            <value>
+              <decimal value="2" />
+            </value>
+          </item>
+        </enum>
+      </elements>
     </policy>
   </policies>
 </policyDefinitions>

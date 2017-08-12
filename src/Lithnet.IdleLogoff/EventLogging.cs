@@ -10,6 +10,7 @@
         internal const int EVT_LOGOFFEVENT = 3;
         internal const int EVT_TIMERINTERVALCHANGED = 4;
         internal const int EVT_LOGOFFFAILED = 5;
+        internal const int EVT_RESTARTFAILED = 6;
         internal static string evtSource = "Lithnet.idlelogoff";
         internal static bool LogEnabled = true;
 

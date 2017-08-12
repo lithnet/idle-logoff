@@ -7,41 +7,49 @@ namespace Lithnet.idlelogoff
     {
         public frmSettings()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
 
         private void frmSettings_Load(object sender, EventArgs e)
         {
-
-            RefreshUI();
+            this.RefreshUI();
         }
 
         private void RefreshUI()
         {
+            this.lbProductName.Text = "Lithnet.idlelogoff";
+            this.lbProductVersion.Text = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString(3);
 
-            lbProductName.Text = "Lithnet.idlelogoff";
-            lbProductVersion.Text = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString(3);
+            this.ckEnableIdleLogoff.Checked = Settings.Enabled;
+            this.ckEnableIdleLogoff.Enabled = !Settings.IsSettingFromPolicy(nameof(Settings.Enabled));
 
-            ckEnableIdleLogoff.Checked = Settings.Enabled;
-            ckEnableIdleLogoff.Enabled = !Settings.IsSettingFromPolicy(nameof(Settings.Enabled));
+            this.ckIgnoreDisplayRequested.Checked = Settings.IgnoreDisplayRequested;
+            this.ckIgnoreDisplayRequested.Enabled = !Settings.IsSettingFromPolicy(nameof(Settings.IgnoreDisplayRequested));
 
-            ckIgnoreDisplayRequested.Checked = Settings.IgnoreDisplayRequested;
-            ckIgnoreDisplayRequested.Enabled = !Settings.IsSettingFromPolicy(nameof(Settings.IgnoreDisplayRequested));
+            this.cbAction.Items.Clear();
+            
+            foreach (string item in Enum.GetNames(typeof(IdleTimeoutAction)))
+            {
+                this.cbAction.Items.Add(item);
+            }
+
+            this.cbAction.SelectedItem = Settings.Action.ToString();
+            this.cbAction.Enabled = !Settings.IsSettingFromPolicy(nameof(Settings.Action));
 
             try
             {
-                udMinutes.Value = Settings.IdleLimit;
+                this.udMinutes.Value = Settings.IdleLimit;
             }
             catch
             {
-                udMinutes.Value = 60;
+                this.udMinutes.Value = 60;
             }
 
-            udMinutes.Enabled = !Settings.IsSettingFromPolicy(nameof(Settings.IdleLimit));
+            this.udMinutes.Enabled = !Settings.IsSettingFromPolicy(nameof(Settings.IdleLimit));
 
-            if (!udMinutes.Enabled | !ckEnableIdleLogoff.Enabled | !ckIgnoreDisplayRequested.Enabled)
+            if (!this.udMinutes.Enabled | !this.ckEnableIdleLogoff.Enabled | !this.ckIgnoreDisplayRequested.Enabled)
             {
-                lbGPControlled.Visible = true;
+                this.lbGPControlled.Visible = true;
             }
         }
 
@@ -49,19 +57,24 @@ namespace Lithnet.idlelogoff
         {
             try
             {
-                if (ckEnableIdleLogoff.Enabled)
+                if (this.ckEnableIdleLogoff.Enabled)
                 {
-                    Settings.Enabled = ckEnableIdleLogoff.Checked;
+                    Settings.Enabled = this.ckEnableIdleLogoff.Checked;
                 }
 
-                if (udMinutes.Enabled)
+                if (this.udMinutes.Enabled)
                 {
-                    Settings.IdleLimit = (int) udMinutes.Value;
+                    Settings.IdleLimit = (int) this.udMinutes.Value;
                 }
 
-                if (ckIgnoreDisplayRequested.Enabled)
+                if (this.ckIgnoreDisplayRequested.Enabled)
                 {
-                    Settings.IgnoreDisplayRequested = ckIgnoreDisplayRequested.Checked;
+                    Settings.IgnoreDisplayRequested = this.ckIgnoreDisplayRequested.Checked;
+                }
+
+                if (this.cbAction.Enabled)
+                {
+                    Settings.Action = (IdleTimeoutAction)Enum.Parse(typeof(IdleTimeoutAction), (string)this.cbAction.SelectedItem, true);
                 }
             }
             catch (Exception ex)
@@ -96,7 +109,7 @@ namespace Lithnet.idlelogoff
 
         private void lbHiddenRefresh_Click(object sender, EventArgs e)
         {
-            RefreshUI();
+            this.RefreshUI();
         }
 
         private void btCancel_Click(object sender, EventArgs e)

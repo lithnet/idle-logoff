@@ -44,11 +44,11 @@
 
             if (Settings.Enabled)
             {
-                EventLogging.TryLogEvent("The application has started. User " + Environment.UserDomainName + "\\" + Environment.UserName + " will be logged off after being idle for " + Settings.IdleLimit + " minutes", EventLogging.EVT_TIMERSTARTED);
+                EventLogging.TryLogEvent($"The application has started. {Settings.Action} will be performed for user {Environment.UserDomainName}\\{Environment.UserName} after being idle for {Settings.IdleLimit} minutes", EventLogging.EVT_TIMERSTARTED);
             }
             else
             {
-                EventLogging.TryLogEvent("The application has started, but is not enabled. User " + Environment.UserDomainName + "\\" + Environment.UserName + " will not be logged off automatically", EventLogging.EVT_TIMERSTARTED);
+                EventLogging.TryLogEvent($"The application has started, but is not enabled. User {Environment.UserDomainName}\\{Environment.UserName} will not be logged off automatically", EventLogging.EVT_TIMERSTARTED);
             }
 
             Program.eventTimer = new Timer();
@@ -122,7 +122,7 @@
 
                 if (initialTime != logoffidletime)
                 {
-                    EventLogging.TryLogEvent($"Idle timeout limit has changed. User {Environment.UserDomainName}\\{Environment.UserName} will now be logged off after {Settings.IdleLimit} minutes", EventLogging.EVT_TIMERINTERVALCHANGED);
+                    EventLogging.TryLogEvent($"Idle timeout limit has changed. {Settings.Action} will be performed for user {Environment.UserDomainName}\\{Environment.UserName}  after {Settings.IdleLimit} minutes", EventLogging.EVT_TIMERINTERVALCHANGED);
                     initialTime = logoffidletime;
                 }
 
@@ -147,7 +147,7 @@
 
                 if (DateTime.Now.Subtract(Program.lastDateTime).TotalMilliseconds > logoffidletime)
                 {
-                    EventLogging.TryLogEvent($"User {Environment.UserName} has passed the idle time limit of {Settings.IdleLimit} minutes. Initiating logoff.", EventLogging.EVT_LOGOFFEVENT);
+                    EventLogging.TryLogEvent($"User {Environment.UserName} has passed the idle time limit of {Settings.IdleLimit} minutes. Initiating {Settings.Action}.", EventLogging.EVT_LOGOFFEVENT);
 
                     if (!Settings.Debug)
                     {
@@ -160,7 +160,7 @@
                         }
                         catch (Exception ex)
                         {
-                            EventLogging.TryLogEvent("An error occurred trying to log off the user\n" + ex.Message, EventLogging.EVT_LOGOFFFAILED);
+                            EventLogging.TryLogEvent($"An error occurred trying to perform the {Settings.Action} operation\n" + ex.Message, EventLogging.EVT_LOGOFFFAILED);
                         }
                     }
                     else

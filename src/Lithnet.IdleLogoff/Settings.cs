@@ -289,6 +289,33 @@ namespace Lithnet.idlelogoff
             }
         }
 
+        public static IdleTimeoutAction Action
+        {
+            get
+            {
+                int retval = 0;
+
+                object regvalue = Settings.GetPolicyOrSetting("Action");
+                if (regvalue != null)
+                {
+                    try
+                    {
+                        retval = (int)regvalue;
+                    }
+                    catch
+                    {
+                        //unable to cast from an object to a string
+                    }
+                }
+
+                return (IdleTimeoutAction)retval;
+            }
+            set
+            {
+                SaveSetting("Action", (int)value, RegistryValueKind.DWord);
+            }
+        }
+
         public static bool IgnoreDisplayRequested
         {
             get
