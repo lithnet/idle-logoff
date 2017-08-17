@@ -184,14 +184,6 @@ namespace Lithnet.idlelogoff
             return false;
         }
 
-        private static object GetSetting(string ValueName)
-        {
-            object value = null;
-
-            value = SettingsKeyReadOnly.GetValue(ValueName, null);
-            return value;
-        }
-
         private static void SaveSetting(string ValueName, object value, RegistryValueKind valuetype)
         {
             SettingsKeyWriteable.SetValue(ValueName, value, valuetype);
@@ -237,7 +229,7 @@ namespace Lithnet.idlelogoff
                 object value = null;
                 bool status = false;
 
-                value = GetSetting("Debug");
+                value = GetPolicyOrSetting("Debug");
                 if (value != null)
                 {
                     try
