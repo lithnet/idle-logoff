@@ -1,17 +1,19 @@
-﻿namespace Lithnet.idlelogoff
-{
-    using System;
-    using System.Windows.Forms;
-    using System.Diagnostics;
+﻿using System;
+using System.Windows.Forms;
+using System.Diagnostics;
+using System.Threading;
+using Timer = System.Timers.Timer;
 
+namespace Lithnet.idlelogoff
+{
     public static class Program
     {
         private static int lastTicks;
         private static DateTime lastDateTime;
         private static Timer eventTimer;
-        private static bool inTimer = false;
-        private static bool backgroundMode = false;
-        private static int initialTime = 0;
+        private static int inTimer;
+        private static bool backgroundMode;
+        private static int initialTime;
 
         [STAThread]
         public static void Main()
@@ -28,7 +30,7 @@
                 }
                 else
                 {
-                    LaunchGUI();
+                    Program.LaunchGui();
                 }
             }
             catch (Exception ex)
@@ -52,8 +54,8 @@
             }
 
             Program.eventTimer = new Timer();
-            Program.eventTimer.Tick += EventTimer_Tick;
-            Program.eventTimer.Interval = 60 * 1000;
+            Program.eventTimer.Elapsed += EventTimer_Tick;
+            Program.eventTimer.Interval = TimeSpan.FromSeconds(60).TotalMilliseconds;
             Program.eventTimer.Start();
         }
 
@@ -72,7 +74,7 @@
                 {
                     //skip over the executable itself
                 }
-                else if (arg.ToLower() == "/register")
+                else if (arg.Equals("/register", StringComparison.OrdinalIgnoreCase))
                 {
                     try
                     {
@@ -84,40 +86,36 @@
                         Environment.Exit(1);
                     }
                 }
-                else if (arg.ToLower() == "/start")
+                else if (arg.Equals("/start", StringComparison.OrdinalIgnoreCase))
                 {
                     backgroundMode = true;
                 }
-                else if (arg.ToLower() == "/attach")
+                else if (arg.Equals("/attach", StringComparison.OrdinalIgnoreCase))
                 {
-                    System.Diagnostics.Debugger.Launch();
+                    Debugger.Launch();
                 }
                 else
                 {
-                    MessageBox.Show("An invalid command line argument was specified: " + arg);
+                    MessageBox.Show($"An invalid command line argument was specified: {arg}");
                     Environment.Exit(1);
                 }
             }
-
-
         }
-
+        
         private static void EventTimer_Tick(object sender, EventArgs e)
         {
-            if (inTimer)
+            if (!Settings.Enabled)
             {
                 return;
             }
 
-            if (!Settings.Enabled)
+            if (Interlocked.CompareExchange(ref Program.inTimer, 1, 0) != 0)
             {
                 return;
             }
 
             try
             {
-                Program.inTimer = true;
-
                 int logoffidletime = Settings.IdleLimit * 60 * 1000;
 
                 if (initialTime != logoffidletime)
@@ -148,30 +146,25 @@
                 if (DateTime.Now.Subtract(Program.lastDateTime).TotalMilliseconds > logoffidletime)
                 {
                     EventLogging.TryLogEvent($"User {Environment.UserName} has passed the idle time limit of {Settings.IdleLimit} minutes. Initiating {Settings.Action}.", EventLogging.EVT_LOGOFFEVENT);
+                    Program.eventTimer.Stop();
 
-                    if (!Settings.Debug)
+                    try
                     {
-                        try
-                        {
-                            NativeMethods.LogOffUser();
-                            Program.eventTimer.Stop();
-                            Program.lastTicks = currentticks;
-                            Program.lastDateTime = DateTime.Now;
-                        }
-                        catch (Exception ex)
-                        {
-                            EventLogging.TryLogEvent($"An error occurred trying to perform the {Settings.Action} operation\n" + ex.Message, EventLogging.EVT_LOGOFFFAILED);
-                        }
+                        NativeMethods.LogOffUser();
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        MessageBox.Show("Idle time limit reached");
+                        EventLogging.TryLogEvent($"An error occurred trying to perform the {Settings.Action} operation\n" + ex.Message, EventLogging.EVT_LOGOFFFAILED);
+                    }
+                    finally
+                    {
+                        Application.Exit();
                     }
                 }
             }
             finally
             {
-                Program.inTimer = false;
+                Program.inTimer = 0;
             }
         }
 
@@ -198,7 +191,7 @@
             }
         }
 
-        private static void LaunchGUI()
+        private static void LaunchGui()
         {
             if (AdminCheck.IsRunningAsAdmin())
             {

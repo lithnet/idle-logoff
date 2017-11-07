@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.Security.AccessControl;
+using System.Security.Principal;
+using System.Threading;
 
 namespace Lithnet.idlelogoff
 {
@@ -71,37 +75,76 @@ namespace Lithnet.idlelogoff
 
         public static void LogOffUser()
         {
-            ShutdownFlags flags;
-            bool elevated = false;
+            Mutex mutex = null;
+            bool hasLock = false;
 
-            if (Settings.Action == IdleTimeoutAction.Reboot || Settings.Action == IdleTimeoutAction.Shutdown)
+            try
             {
-                try
+                MutexAccessRule ace = new MutexAccessRule(new SecurityIdentifier(WellKnownSidType.WorldSid, null), MutexRights.FullControl, AccessControlType.Allow);
+                MutexSecurity mutexSecurity = new MutexSecurity();
+                mutexSecurity.AddAccessRule(ace);
+                mutex = new Mutex(false, "Global\\lithnet.idlelogoff", out bool createdNew, mutexSecurity);
+
+                mutex.WaitOne();
+                hasLock = true;
+
+                ShutdownFlags flags;
+                bool elevated = false;
+                bool isLastSession = false;
+
+                if (Settings.Action == IdleTimeoutAction.Reboot || Settings.Action == IdleTimeoutAction.Shutdown)
                 {
-                    ElevatePrivileges();
-                    elevated = true;
+                    try
+                    {
+                        ElevatePrivileges();
+                        elevated = true;
+                    }
+                    catch (Exception ex)
+                    {
+                        EventLogging.TryLogEvent($"Could not get workstation shutdown permissions. Logging off instead\n{ex}", EventLogging.EVT_RESTARTFAILED, EventLogEntryType.Error);
+                    }
+
+                    Process[] p = Process.GetProcessesByName(Process.GetCurrentProcess().ProcessName);
+
+                    isLastSession = p.Length <= 1;
+
+                    if (!isLastSession)
+                    {
+                        EventLogging.TryLogEvent($"{Settings.Action} will not be performed as other sessions are still active. Logging off instead", EventLogging.EVT_SESSIONINUSE, EventLogEntryType.Warning);
+                    }
                 }
-                catch (Exception ex)
+
+                if (isLastSession && elevated && Settings.Action == IdleTimeoutAction.Shutdown)
                 {
-                    EventLogging.TryLogEvent($"Could not get workstation shutdown permissions. Logging off instead\n{ex}", EventLogging.EVT_RESTARTFAILED, System.Diagnostics.EventLogEntryType.Error);
+                    flags = ShutdownFlags.Shutdown | ShutdownFlags.Force;
+                }
+                else if (isLastSession && elevated && Settings.Action == IdleTimeoutAction.Reboot)
+                {
+                    flags = ShutdownFlags.Reboot | ShutdownFlags.Force;
+                }
+                else
+                {
+                    flags = ShutdownFlags.Logoff | ShutdownFlags.Force;
+                }
+
+                if (Settings.Debug)
+                {
+                    EventLogging.TryLogEvent($"Performed {flags} for user {Environment.UserName}", 0, EventLogEntryType.Information);
+                }
+                else
+                {
+                    if (!ExitWindowsEx(flags, 0))
+                    {
+                        throw new Win32Exception(Marshal.GetLastWin32Error());
+                    }
                 }
             }
-
-            if (elevated && Settings.Action == IdleTimeoutAction.Shutdown)
+            finally
             {
-                flags = ShutdownFlags.Shutdown | ShutdownFlags.Force;
-            }
-            else if (elevated && Settings.Action == IdleTimeoutAction.Reboot)
-            {
-                flags = ShutdownFlags.Reboot | ShutdownFlags.Force;
-            }
-            else            {
-                flags = ShutdownFlags.Logoff | ShutdownFlags.Force;
-            }
-
-            if (!ExitWindowsEx(flags, 0))
-            {
-                throw new Win32Exception(Marshal.GetLastWin32Error());
+                if (hasLock)
+                {
+                    mutex.ReleaseMutex();
+                }
             }
         }
 
