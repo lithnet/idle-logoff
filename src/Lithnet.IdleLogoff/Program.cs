@@ -2,7 +2,8 @@
 using System.Windows.Forms;
 using System.Diagnostics;
 using System.Threading;
-using Timer = System.Timers.Timer;
+using lithnet.idlelogoff;
+using Timer = System.Windows.Forms.Timer;
 
 namespace Lithnet.idlelogoff
 {
@@ -10,10 +11,14 @@ namespace Lithnet.idlelogoff
     {
         private static int lastTicks;
         private static DateTime lastDateTime;
+
+        private static DateTime nextCheck;
+
         private static Timer eventTimer;
         private static int inTimer;
         private static bool backgroundMode;
-        private static int initialTime;
+        private static int initialLogoffIdleInterval;
+        private static LogoffWarning warningDialog = new LogoffWarning();
 
         [STAThread]
         public static void Main()
@@ -41,21 +46,20 @@ namespace Lithnet.idlelogoff
 
         private static void InitTimer()
         {
-            int logoffidletime = Settings.IdleLimit * 60 * 1000;
-            initialTime = logoffidletime;
+            Program.initialLogoffIdleInterval = Settings.IdleLimit * 60 * 1000;
 
             if (Settings.Enabled)
             {
-                EventLogging.TryLogEvent($"The application has started. {Settings.Action} will be performed for user {Environment.UserDomainName}\\{Environment.UserName} after being idle for {Settings.IdleLimit} minutes", EventLogging.EVT_TIMERSTARTED);
+                EventLogging.TryLogEvent($"The application has started. {Settings.Action} will be performed for user {Environment.UserDomainName}\\{Environment.UserName} after being idle for {Settings.IdleLimit} minutes", EventLogging.EvtTimerstarted);
             }
             else
             {
-                EventLogging.TryLogEvent($"The application has started, but is not enabled. User {Environment.UserDomainName}\\{Environment.UserName} will not be logged off automatically", EventLogging.EVT_TIMERSTARTED);
+                EventLogging.TryLogEvent($"The application has started, but is not enabled. User {Environment.UserDomainName}\\{Environment.UserName} will not be logged off automatically", EventLogging.EvtTimerstarted);
             }
 
             Program.eventTimer = new Timer();
-            Program.eventTimer.Elapsed += EventTimer_Tick;
-            Program.eventTimer.Interval = TimeSpan.FromSeconds(60).TotalMilliseconds;
+            Program.eventTimer.Tick += EventTimer_Tick;
+            Program.eventTimer.Interval = (int)TimeSpan.FromSeconds(15).TotalMilliseconds;
             Program.eventTimer.Start();
         }
 
@@ -101,7 +105,7 @@ namespace Lithnet.idlelogoff
                 }
             }
         }
-        
+
         private static void EventTimer_Tick(object sender, EventArgs e)
         {
             if (!Settings.Enabled)
@@ -116,37 +120,49 @@ namespace Lithnet.idlelogoff
 
             try
             {
-                int logoffidletime = Settings.IdleLimit * 60 * 1000;
+                int logoffIdleInterval = Settings.IdleLimit * 60 * 1000;
+                int warningInterval = ((Settings.IdleLimit * 60) - Settings.WarningPeriod) * 1000;
 
-                if (initialTime != logoffidletime)
+                if (Program.initialLogoffIdleInterval != logoffIdleInterval)
                 {
-                    EventLogging.TryLogEvent($"Idle timeout limit has changed. {Settings.Action} will be performed for user {Environment.UserDomainName}\\{Environment.UserName}  after {Settings.IdleLimit} minutes", EventLogging.EVT_TIMERINTERVALCHANGED);
-                    initialTime = logoffidletime;
+                    EventLogging.TryLogEvent($"Idle timeout limit has changed. {Settings.Action} will be performed for user {Environment.UserDomainName}\\{Environment.UserName}  after {Settings.IdleLimit} minutes", EventLogging.EvtTimerintervalchanged);
+                    Program.initialLogoffIdleInterval = logoffIdleInterval;
                 }
 
                 int currentticks = NativeMethods.GetLastInputTime();
+                double currentms = DateTime.Now.Subtract(Program.lastDateTime).TotalMilliseconds;
 
                 if (!Settings.IgnoreDisplayRequested && NativeMethods.IsDisplayRequested())
                 {
                     Trace.WriteLine("An application has requested the system display stay on");
                     Program.lastDateTime = DateTime.Now;
                     Program.lastTicks = currentticks;
+                    Program.HideWarning();
                     return;
                 }
-
 
                 if (currentticks != Program.lastTicks)
                 {
                     Trace.WriteLine("Input received");
                     Program.lastTicks = currentticks;
                     Program.lastDateTime = DateTime.Now;
+                    Program.HideWarning();
                     return;
                 }
 
-                if (DateTime.Now.Subtract(Program.lastDateTime).TotalMilliseconds > logoffidletime)
+                if (Settings.WarningPeriod > 0 && warningInterval < logoffIdleInterval)
                 {
-                    EventLogging.TryLogEvent($"User {Environment.UserName} has passed the idle time limit of {Settings.IdleLimit} minutes. Initiating {Settings.Action}.", EventLogging.EVT_LOGOFFEVENT);
+                    if (currentms > warningInterval && currentms < logoffIdleInterval)
+                    {
+                        Program.ShowWarning(logoffIdleInterval);
+                    }
+                }
+
+                if (currentms > logoffIdleInterval)
+                {
+                    EventLogging.TryLogEvent($"User {Environment.UserName} has passed the idle time limit of {Settings.IdleLimit} minutes. Initiating {Settings.Action}.", EventLogging.EvtLogoffevent);
                     Program.eventTimer.Stop();
+                    Program.HideWarning();
 
                     try
                     {
@@ -154,7 +170,7 @@ namespace Lithnet.idlelogoff
                     }
                     catch (Exception ex)
                     {
-                        EventLogging.TryLogEvent($"An error occurred trying to perform the {Settings.Action} operation\n" + ex.Message, EventLogging.EVT_LOGOFFFAILED);
+                        EventLogging.TryLogEvent($"An error occurred trying to perform the {Settings.Action} operation\n" + ex.Message, EventLogging.EvtLogofffailed);
                     }
                     finally
                     {
@@ -165,6 +181,28 @@ namespace Lithnet.idlelogoff
             finally
             {
                 Program.inTimer = 0;
+            }
+        }
+
+        private static void ShowWarning(int logoffIdleInterval)
+        {
+            if (!Program.warningDialog.Visible)
+            {
+                Trace.WriteLine("Showing warning");
+                Program.warningDialog.LogoffDateTime = Program.lastDateTime.AddMilliseconds(logoffIdleInterval);
+                Program.warningDialog.Show();
+                Program.warningDialog.BringToFront();
+                Program.warningDialog.Focus();
+                Program.warningDialog.TopMost = true;
+            }
+        }
+
+        private static void HideWarning()
+        {
+            if (warningDialog.Visible)
+            {
+                Trace.WriteLine("Hiding warning window");
+                warningDialog.Hide();
             }
         }
 
@@ -196,15 +234,13 @@ namespace Lithnet.idlelogoff
             if (AdminCheck.IsRunningAsAdmin())
             {
                 Application.EnableVisualStyles();
-                Application.Run(new frmSettings());
+                Application.Run(new FrmSettings());
             }
             else
             {
                 if (Environment.OSVersion.Version.Major >= 6)
                 {
-                    bool usercanceled;
-
-                    if (AdminCheck.TryRestartElevated(out usercanceled))
+                    if (AdminCheck.TryRestartElevated(out bool usercanceled))
                     {
                         Environment.Exit(0);
                     }

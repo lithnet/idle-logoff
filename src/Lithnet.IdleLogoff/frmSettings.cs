@@ -3,9 +3,9 @@ using System.Windows.Forms;
 
 namespace Lithnet.idlelogoff
 {
-    public partial class frmSettings : Form
+    public partial class FrmSettings : Form
     {
-        public frmSettings()
+        public FrmSettings()
         {
             this.InitializeComponent();
         }

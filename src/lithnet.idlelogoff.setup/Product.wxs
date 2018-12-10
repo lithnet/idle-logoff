@@ -93,6 +93,13 @@
       <Component Id="cmp37b03735f0fa4678bbe3298d319df81a" Guid="*" Directory="POLICYFOLDERLOCALIZATIONS" >
         <File Id="file1cb72b2e9d14cb183778caa43dd2efe" KeyPath="yes" Source="$(var.lithnet.idlelogoff.TargetDir)\PolicyDefinitions\en-US\lithnet.idlelogoff.adml" />
       </Component>
+
+      <Component Id="cmp8f072b9d7556476d84579295536ec55d" Guid="*" Directory="POLICYFOLDER" Shared="yes" >
+        <File Id="fileeb730f97aa0425e8de8c3882e01e77a" KeyPath="yes" Source="$(var.lithnet.idlelogoff.TargetDir)\PolicyDefinitions\lithnet.admx" />
+      </Component>
+      <Component Id="cmpfc02f2bf23f84411a9caff880722e9b2" Guid="*" Directory="POLICYFOLDERLOCALIZATIONS" Shared="yes">
+        <File Id="filcdb3c2fedab347ef8306ab3c4f5f3d39" KeyPath="yes" Source="$(var.lithnet.idlelogoff.TargetDir)\PolicyDefinitions\en-US\lithnet.adml" />
+      </Component>
     </ComponentGroup>
   </Product>
 </Wix>

@@ -10,10 +10,10 @@ namespace Lithnet.idlelogoff
     {
         private static string strBaseSettingsKey = "Software\\Lithnet\\IdleLogOff";
         private static string strBasePolicyKey = "Software\\Policies\\Lithnet\\IdleLogOff";
-        private static RegistryKey _regkeySettings;
-        private static RegistryKey _regkeySettingsWritable;
-        private static RegistryKey _regkeyMachinePolicy;
-        private static RegistryKey _regkeyUserPolicy;
+        private static RegistryKey regkeySettings;
+        private static RegistryKey regkeySettingsWritable;
+        private static RegistryKey regkeyMachinePolicy;
+        private static RegistryKey regkeyUserPolicy;
 
         private static RegistryKey SettingsKeyReadOnly
         {
@@ -21,19 +21,19 @@ namespace Lithnet.idlelogoff
             {
                 try
                 {
-                    if (_regkeySettings == null)
+                    if (Settings.regkeySettings == null)
                     {
-                        _regkeySettings = Registry.LocalMachine.OpenSubKey(strBaseSettingsKey);
+                        Settings.regkeySettings = Registry.LocalMachine.OpenSubKey(strBaseSettingsKey);
                     }
                     else
                     {
                         try
                         {
-                            int x = _regkeySettings.ValueCount;
+                            int x = Settings.regkeySettings.ValueCount;
                         }
                         catch // catch handler for a key that is missing and no longer valid
                         {
-                            _regkeySettings = Registry.LocalMachine.OpenSubKey(strBaseSettingsKey);
+                            Settings.regkeySettings = Registry.LocalMachine.OpenSubKey(strBaseSettingsKey);
                         }
                     }
                 }
@@ -42,7 +42,7 @@ namespace Lithnet.idlelogoff
                     // could not open registry key
                 }
 
-                return _regkeySettings;
+                return Settings.regkeySettings;
             }
         }
 
@@ -53,20 +53,20 @@ namespace Lithnet.idlelogoff
                 try
                 {
 
-                    if (_regkeySettingsWritable == null)
+                    if (Settings.regkeySettingsWritable == null)
                     {
 
-                        _regkeySettingsWritable = Registry.LocalMachine.CreateSubKey(strBaseSettingsKey);
+                        Settings.regkeySettingsWritable = Registry.LocalMachine.CreateSubKey(strBaseSettingsKey);
                     }
                     else
                     {
                         try
                         {
-                            int x = _regkeySettingsWritable.ValueCount;
+                            int x = Settings.regkeySettingsWritable.ValueCount;
                         }
                         catch // catch handler for a key that is missing and no longer valid
                         {
-                            _regkeySettingsWritable = Registry.LocalMachine.CreateSubKey(strBaseSettingsKey);
+                            Settings.regkeySettingsWritable = Registry.LocalMachine.CreateSubKey(strBaseSettingsKey);
                         }
                     }
                 }
@@ -75,7 +75,7 @@ namespace Lithnet.idlelogoff
                     // could not open registry key
                 }
 
-                return _regkeySettingsWritable;
+                return Settings.regkeySettingsWritable;
 
             }
 
@@ -85,22 +85,22 @@ namespace Lithnet.idlelogoff
         {
             get
             {
-                if (_regkeyMachinePolicy == null)
+                if (Settings.regkeyMachinePolicy == null)
                 {
-                    _regkeyMachinePolicy = Registry.LocalMachine.OpenSubKey(strBasePolicyKey, false);
+                    Settings.regkeyMachinePolicy = Registry.LocalMachine.OpenSubKey(strBasePolicyKey, false);
                 }
                 else
                 {
                     try
                     {
-                        int x = _regkeyMachinePolicy.ValueCount;
+                        int x = Settings.regkeyMachinePolicy.ValueCount;
                     }
                     catch // catch handler for a key that is missing and no longer valid
                     {
-                        _regkeyMachinePolicy = Registry.LocalMachine.OpenSubKey(strBasePolicyKey, false);
+                        Settings.regkeyMachinePolicy = Registry.LocalMachine.OpenSubKey(strBasePolicyKey, false);
                     }
                 }
-                return _regkeyMachinePolicy;
+                return Settings.regkeyMachinePolicy;
             }
 
         }
@@ -109,23 +109,23 @@ namespace Lithnet.idlelogoff
         {
             get
             {
-                if (_regkeyUserPolicy == null)
+                if (Settings.regkeyUserPolicy == null)
                 {
-                    _regkeyUserPolicy = Registry.CurrentUser.OpenSubKey(strBasePolicyKey, false);
+                    Settings.regkeyUserPolicy = Registry.CurrentUser.OpenSubKey(strBasePolicyKey, false);
                 }
                 else
                 {
                     try
                     {
-                        int x = _regkeyUserPolicy.ValueCount;
+                        int x = Settings.regkeyUserPolicy.ValueCount;
                     }
                     catch // catch handler for a key that is missing and no longer valid
                     {
-                        _regkeyUserPolicy = Registry.CurrentUser.OpenSubKey(strBasePolicyKey, false);
+                        Settings.regkeyUserPolicy = Registry.CurrentUser.OpenSubKey(strBasePolicyKey, false);
                     }
                 }
 
-                return _regkeyUserPolicy;
+                return Settings.regkeyUserPolicy;
             }
         }
 
@@ -184,9 +184,9 @@ namespace Lithnet.idlelogoff
             return false;
         }
 
-        private static void SaveSetting(string ValueName, object value, RegistryValueKind valuetype)
+        private static void SaveSetting(string valueName, object value, RegistryValueKind valuetype)
         {
-            SettingsKeyWriteable.SetValue(ValueName, value, valuetype);
+            SettingsKeyWriteable.SetValue(valueName, value, valuetype);
         }
 
         public static int IdleLimit
@@ -211,10 +211,32 @@ namespace Lithnet.idlelogoff
 
                 return retval;
             }
-            set
+            set => SaveSetting("IdleLimit", value, RegistryValueKind.DWord);
+        }
+
+        public static int WarningPeriod
+        {
+            get
             {
-                SaveSetting("IdleLimit", value, RegistryValueKind.DWord);
+                object regvalue = null;
+                int retval = 0;
+
+                regvalue = GetPolicyOrSetting("WarningPeriod");
+                if (regvalue != null)
+                {
+                    try
+                    {
+                        retval = (int)regvalue;
+                    }
+                    catch
+                    {
+                        //unable to cast from an object to a string
+                    }
+                }
+
+                return retval;
             }
+            set => SaveSetting("WarningPeriod", value, RegistryValueKind.DWord);
         }
 
         public static bool Debug
@@ -275,10 +297,7 @@ namespace Lithnet.idlelogoff
                 }
                 return status;
             }
-            set
-            {
-                SaveSetting("Enabled", Convert.ToInt32(value), RegistryValueKind.DWord);
-            }
+            set => SaveSetting("Enabled", Convert.ToInt32(value), RegistryValueKind.DWord);
         }
 
         public static IdleTimeoutAction Action
@@ -302,10 +321,7 @@ namespace Lithnet.idlelogoff
 
                 return (IdleTimeoutAction)retval;
             }
-            set
-            {
-                SaveSetting("Action", (int)value, RegistryValueKind.DWord);
-            }
+            set => SaveSetting("Action", (int)value, RegistryValueKind.DWord);
         }
 
         public static bool IgnoreDisplayRequested
@@ -333,46 +349,43 @@ namespace Lithnet.idlelogoff
                 }
                 return status;
             }
-            set
-            {
-                SaveSetting("IgnoreDisplayRequested", Convert.ToInt32(value), RegistryValueKind.DWord);
-            }
+            set => SaveSetting("IgnoreDisplayRequested", Convert.ToInt32(value), RegistryValueKind.DWord);
         }
 
 
         public static void Release()
         {
-            if (_regkeyMachinePolicy != null)
+            if (Settings.regkeyMachinePolicy != null)
             {
-                _regkeyMachinePolicy.Close();
-                _regkeyMachinePolicy = null;
+                Settings.regkeyMachinePolicy.Close();
+                Settings.regkeyMachinePolicy = null;
             }
 
-            if (_regkeyUserPolicy != null)
+            if (Settings.regkeyUserPolicy != null)
             {
-                _regkeyUserPolicy.Close();
-                _regkeyUserPolicy = null;
+                Settings.regkeyUserPolicy.Close();
+                Settings.regkeyUserPolicy = null;
             }
 
-            if (_regkeySettings != null)
+            if (Settings.regkeySettings != null)
             {
-                _regkeySettings.Close();
-                _regkeySettings = null;
+                Settings.regkeySettings.Close();
+                Settings.regkeySettings = null;
             }
         }
 
         public static void CreateStartupRegKey()
         {
-            RegistryKey _HKLMRun = Registry.LocalMachine.CreateSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Run");
+            RegistryKey hklmRun = Registry.LocalMachine.CreateSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Run");
             string cmdline = "\"" + System.Windows.Forms.Application.ExecutablePath + "\" /start";
 
-            _HKLMRun.SetValue("Lithnet.idlelogoff", cmdline);
+            hklmRun.SetValue("Lithnet.idlelogoff", cmdline);
         }
 
         public static void DeleteStartupRegKey()
         {
-            RegistryKey _HKLMRun = Registry.LocalMachine.CreateSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Run");
-            _HKLMRun.DeleteValue("Lithnet.idlelogoff", false);
+            RegistryKey hklmRun = Registry.LocalMachine.CreateSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Run");
+            hklmRun.DeleteValue("Lithnet.idlelogoff", false);
         }
     }
 }

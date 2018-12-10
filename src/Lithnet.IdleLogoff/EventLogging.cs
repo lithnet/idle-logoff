@@ -5,14 +5,14 @@
 
     public class EventLogging
     {
-        internal const int EVT_REGISTEREDSOURCE = 1;
-        internal const int EVT_TIMERSTARTED = 2;
-        internal const int EVT_LOGOFFEVENT = 3;
-        internal const int EVT_TIMERINTERVALCHANGED = 4;
-        internal const int EVT_LOGOFFFAILED = 5;
-        internal const int EVT_RESTARTFAILED = 6;
-        internal const int EVT_SESSIONINUSE = 7;
-        internal static string evtSource = "Lithnet.idlelogoff";
+        internal const int EvtRegisteredsource = 1;
+        internal const int EvtTimerstarted = 2;
+        internal const int EvtLogoffevent = 3;
+        internal const int EvtTimerintervalchanged = 4;
+        internal const int EvtLogofffailed = 5;
+        internal const int EvtRestartfailed = 6;
+        internal const int EvtSessioninuse = 7;
+        internal static string EvtSource = "Lithnet.idlelogoff";
         internal static bool LogEnabled = true;
 
         public static void InitEventLog()
@@ -28,10 +28,10 @@
 
         public static void RegisterEventSource()
         {
-            if (!EventLog.SourceExists(evtSource))
+            if (!EventLog.SourceExists(EventLogging.EvtSource))
             {
-                EventLog.CreateEventSource(evtSource, "Application");
-                TryLogEvent("The event log source was registered", EVT_REGISTEREDSOURCE);
+                EventLog.CreateEventSource(EventLogging.EvtSource, "Application");
+                TryLogEvent("The event log source was registered", EventLogging.EvtRegisteredsource);
             }
         }
 
@@ -39,7 +39,7 @@
         {
             try
             {
-                if (EventLog.SourceExists(evtSource))
+                if (EventLog.SourceExists(EventLogging.EvtSource))
                 {
                     return true;
                 }
@@ -82,7 +82,7 @@
             Trace.WriteLine($"{entryType}: {eventID}: {eventText}");
             if (LogEnabled)
             {
-                EventLog.WriteEntry(evtSource, eventText, entryType, eventID);
+                EventLog.WriteEntry(EventLogging.EvtSource, eventText, entryType, eventID);
             }
         }
 

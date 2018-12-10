@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Lithnet.idlelogoff
 {
-    public enum POWER_INFORMATION_LEVEL
+    public enum PowerInformationLevel
     {
         AdministratorPowerPolicy = 9,
         LastSleepTime = 15,

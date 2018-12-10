@@ -10,17 +10,17 @@ namespace Lithnet.idlelogoff
 {
     public class NativeMethods
     {
-        internal const int SE_PRIVILEGE_ENABLED = 0x00000002;
-        internal const int TOKEN_QUERY = 0x00000008;
-        internal const int TOKEN_ADJUST_PRIVILEGES = 0x00000020;
-        internal const string SE_SHUTDOWN_NAME = "SeShutdownPrivilege";
+        internal const int SePrivilegeEnabled = 0x00000002;
+        internal const int TokenQuery = 0x00000008;
+        internal const int TokenAdjustPrivileges = 0x00000020;
+        internal const string SeShutdownName = "SeShutdownPrivilege";
 
         [DllImport("powrprof.dll")]
         private static extern int CallNtPowerInformation(
-            POWER_INFORMATION_LEVEL informationLevel,
+            PowerInformationLevel informationLevel,
             IntPtr lpInputBuffer,
             int nInputBufferSize,
-            out EXECUTION_STATE state,
+            out ExecutionState state,
             int nOutputBufferSize
         );
 
@@ -48,16 +48,16 @@ namespace Lithnet.idlelogoff
 
         public static bool IsDisplayRequested()
         {
-            EXECUTION_STATE state;
+            ExecutionState state;
 
-            int retval = CallNtPowerInformation(POWER_INFORMATION_LEVEL.SystemExecutionState, IntPtr.Zero, 0, out state, sizeof(EXECUTION_STATE));
+            int retval = CallNtPowerInformation(PowerInformationLevel.SystemExecutionState, IntPtr.Zero, 0, out state, sizeof(ExecutionState));
 
             if (retval != 0)
             {
                 throw new Win32Exception(retval);
             }
 
-            return (state.HasFlag(EXECUTION_STATE.DISPLAY_REQUIRED));
+            return (state.HasFlag(ExecutionState.DisplayRequired));
         }
 
         public static int GetLastInputTime()
@@ -101,7 +101,7 @@ namespace Lithnet.idlelogoff
                     }
                     catch (Exception ex)
                     {
-                        EventLogging.TryLogEvent($"Could not get workstation shutdown permissions. Logging off instead\n{ex}", EventLogging.EVT_RESTARTFAILED, EventLogEntryType.Error);
+                        EventLogging.TryLogEvent($"Could not get workstation shutdown permissions. Logging off instead\n{ex}", EventLogging.EvtRestartfailed, EventLogEntryType.Error);
                     }
 
                     Process[] p = Process.GetProcessesByName(Process.GetCurrentProcess().ProcessName);
@@ -110,7 +110,7 @@ namespace Lithnet.idlelogoff
 
                     if (!isLastSession)
                     {
-                        EventLogging.TryLogEvent($"{Settings.Action} will not be performed as other sessions are still active. Logging off instead", EventLogging.EVT_SESSIONINUSE, EventLogEntryType.Warning);
+                        EventLogging.TryLogEvent($"{Settings.Action} will not be performed as other sessions are still active. Logging off instead", EventLogging.EvtSessioninuse, EventLogEntryType.Warning);
                     }
                 }
 
@@ -155,7 +155,7 @@ namespace Lithnet.idlelogoff
 
             try
             {
-                int result = OpenProcessToken(currentProcess, TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, ref tokenHandle);
+                int result = OpenProcessToken(currentProcess, NativeMethods.TokenAdjustPrivileges | NativeMethods.TokenQuery, ref tokenHandle);
 
                 if (result == 0)
                 {
@@ -165,9 +165,9 @@ namespace Lithnet.idlelogoff
                 TokenPrivileges tokenPrivileges;
                 tokenPrivileges.PrivilegeCount = 1;
                 tokenPrivileges.Luid = 0;
-                tokenPrivileges.Attributes = SE_PRIVILEGE_ENABLED;
+                tokenPrivileges.Attributes = NativeMethods.SePrivilegeEnabled;
 
-                result = LookupPrivilegeValue(null, SE_SHUTDOWN_NAME, ref tokenPrivileges.Luid);
+                result = LookupPrivilegeValue(null, NativeMethods.SeShutdownName, ref tokenPrivileges.Luid);
                 if (result == 0)
                 {
                     throw new Win32Exception(Marshal.GetLastWin32Error());
