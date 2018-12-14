@@ -40,13 +40,16 @@
             this.ckIgnoreDisplayRequested = new System.Windows.Forms.CheckBox();
             this.cbAction = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.udWarning = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.udMinutes)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udWarning)).BeginInit();
             this.SuspendLayout();
             // 
             // ckEnableIdleLogoff
             // 
             this.ckEnableIdleLogoff.AutoSize = true;
-            this.ckEnableIdleLogoff.Location = new System.Drawing.Point(100, 40);
+            this.ckEnableIdleLogoff.Location = new System.Drawing.Point(38, 35);
             this.ckEnableIdleLogoff.Name = "ckEnableIdleLogoff";
             this.ckEnableIdleLogoff.Size = new System.Drawing.Size(118, 17);
             this.ckEnableIdleLogoff.TabIndex = 0;
@@ -55,7 +58,7 @@
             // 
             // udMinutes
             // 
-            this.udMinutes.Location = new System.Drawing.Point(227, 58);
+            this.udMinutes.Location = new System.Drawing.Point(229, 53);
             this.udMinutes.Maximum = new decimal(new int[] {
             35791,
             0,
@@ -78,7 +81,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(97, 60);
+            this.label1.Location = new System.Drawing.Point(35, 55);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(124, 13);
             this.label1.TabIndex = 2;
@@ -86,7 +89,7 @@
             // 
             // btOK
             // 
-            this.btOK.Location = new System.Drawing.Point(344, 181);
+            this.btOK.Location = new System.Drawing.Point(345, 235);
             this.btOK.Name = "btOK";
             this.btOK.Size = new System.Drawing.Size(71, 24);
             this.btOK.TabIndex = 4;
@@ -97,7 +100,7 @@
             // btCancel
             // 
             this.btCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btCancel.Location = new System.Drawing.Point(267, 181);
+            this.btCancel.Location = new System.Drawing.Point(268, 235);
             this.btCancel.Name = "btCancel";
             this.btCancel.Size = new System.Drawing.Size(71, 24);
             this.btCancel.TabIndex = 3;
@@ -108,7 +111,7 @@
             // lbProductName
             // 
             this.lbProductName.AutoSize = true;
-            this.lbProductName.Location = new System.Drawing.Point(7, 183);
+            this.lbProductName.Location = new System.Drawing.Point(8, 237);
             this.lbProductName.Name = "lbProductName";
             this.lbProductName.Size = new System.Drawing.Size(99, 13);
             this.lbProductName.TabIndex = 4;
@@ -116,7 +119,7 @@
             // 
             // lbProductVersion
             // 
-            this.lbProductVersion.Location = new System.Drawing.Point(7, 196);
+            this.lbProductVersion.Location = new System.Drawing.Point(8, 250);
             this.lbProductVersion.Name = "lbProductVersion";
             this.lbProductVersion.Size = new System.Drawing.Size(119, 13);
             this.lbProductVersion.TabIndex = 5;
@@ -142,7 +145,7 @@
             // 
             // ckIgnoreDisplayRequested
             // 
-            this.ckIgnoreDisplayRequested.Location = new System.Drawing.Point(100, 88);
+            this.ckIgnoreDisplayRequested.Location = new System.Drawing.Point(39, 165);
             this.ckIgnoreDisplayRequested.Name = "ckIgnoreDisplayRequested";
             this.ckIgnoreDisplayRequested.Size = new System.Drawing.Size(315, 34);
             this.ckIgnoreDisplayRequested.TabIndex = 8;
@@ -153,7 +156,7 @@
             // 
             this.cbAction.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbAction.FormattingEnabled = true;
-            this.cbAction.Location = new System.Drawing.Point(154, 131);
+            this.cbAction.Location = new System.Drawing.Point(156, 83);
             this.cbAction.Name = "cbAction";
             this.cbAction.Size = new System.Drawing.Size(166, 21);
             this.cbAction.TabIndex = 10;
@@ -161,19 +164,51 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(97, 131);
+            this.label2.Location = new System.Drawing.Point(35, 84);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(40, 13);
             this.label2.TabIndex = 11;
             this.label2.Text = "Action";
             // 
-            // frmSettings
+            // label3
+            // 
+            this.label3.Location = new System.Drawing.Point(35, 110);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(188, 32);
+            this.label3.TabIndex = 13;
+            this.label3.Text = "Show a warning before idle action is taken (seconds)";
+            // 
+            // udWarning
+            // 
+            this.udWarning.Location = new System.Drawing.Point(229, 110);
+            this.udWarning.Maximum = new decimal(new int[] {
+            35791,
+            0,
+            0,
+            0});
+            this.udWarning.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.udWarning.Name = "udWarning";
+            this.udWarning.Size = new System.Drawing.Size(93, 22);
+            this.udWarning.TabIndex = 12;
+            this.udWarning.Value = new decimal(new int[] {
+            60,
+            0,
+            0,
+            0});
+            // 
+            // FrmSettings
             // 
             this.AcceptButton = this.btOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btCancel;
-            this.ClientSize = new System.Drawing.Size(427, 217);
+            this.ClientSize = new System.Drawing.Size(427, 271);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.udWarning);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.cbAction);
             this.Controls.Add(this.ckIgnoreDisplayRequested);
@@ -194,6 +229,7 @@
             this.Text = "IdleLogoff Settings";
             this.Load += new System.EventHandler(this.frmSettings_Load);
             ((System.ComponentModel.ISupportInitialize)(this.udMinutes)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udWarning)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -213,5 +249,7 @@
         private System.Windows.Forms.CheckBox ckIgnoreDisplayRequested;
         private System.Windows.Forms.ComboBox cbAction;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.NumericUpDown udWarning;
     }
 }

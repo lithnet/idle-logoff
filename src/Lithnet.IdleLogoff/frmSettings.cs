@@ -27,7 +27,7 @@ namespace Lithnet.idlelogoff
             this.ckIgnoreDisplayRequested.Enabled = !Settings.IsSettingFromPolicy(nameof(Settings.IgnoreDisplayRequested));
 
             this.cbAction.Items.Clear();
-            
+
             foreach (string item in Enum.GetNames(typeof(IdleTimeoutAction)))
             {
                 this.cbAction.Items.Add(item);
@@ -45,9 +45,12 @@ namespace Lithnet.idlelogoff
                 this.udMinutes.Value = 60;
             }
 
-            this.udMinutes.Enabled = !Settings.IsSettingFromPolicy(nameof(Settings.IdleLimit));
+            this.udWarning.Value = Settings.WarningPeriod;
 
-            if (!this.udMinutes.Enabled | !this.ckEnableIdleLogoff.Enabled | !this.ckIgnoreDisplayRequested.Enabled)
+            this.udMinutes.Enabled = !Settings.IsSettingFromPolicy(nameof(Settings.IdleLimit));
+            this.udWarning.Enabled = !Settings.IsSettingFromPolicy(nameof(Settings.WarningPeriod));
+
+            if (!this.udMinutes.Enabled | !this.ckEnableIdleLogoff.Enabled | !this.ckIgnoreDisplayRequested.Enabled | !this.udWarning.Enabled)
             {
                 this.lbGPControlled.Visible = true;
             }
@@ -70,6 +73,11 @@ namespace Lithnet.idlelogoff
                 if (this.ckIgnoreDisplayRequested.Enabled)
                 {
                     Settings.IgnoreDisplayRequested = this.ckIgnoreDisplayRequested.Checked;
+                }
+
+                if (this.udWarning.Enabled)
+                {
+                    Settings.WarningPeriod = (int) this.udWarning.Value;
                 }
 
                 if (this.cbAction.Enabled)
