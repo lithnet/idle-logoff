@@ -186,11 +186,6 @@
             0,
             0,
             0});
-            this.udWarning.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
             this.udWarning.Name = "udWarning";
             this.udWarning.Size = new System.Drawing.Size(93, 22);
             this.udWarning.TabIndex = 12;

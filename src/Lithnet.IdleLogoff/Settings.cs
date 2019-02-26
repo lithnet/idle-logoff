@@ -234,7 +234,7 @@ namespace Lithnet.idlelogoff
                     }
                 }
 
-                return retval;
+                return Math.Max(retval, 0);
             }
             set => SaveSetting("WarningPeriod", value, RegistryValueKind.DWord);
         }
