@@ -23,7 +23,7 @@ namespace Lithnet.idlelogoff
                 {
                     if (Settings.regkeySettings == null)
                     {
-                        Settings.regkeySettings = Registry.LocalMachine.OpenSubKey(strBaseSettingsKey);
+                        Settings.regkeySettings = Registry.LocalMachine.OpenSubKey(Settings.strBaseSettingsKey);
                     }
                     else
                     {
@@ -33,7 +33,7 @@ namespace Lithnet.idlelogoff
                         }
                         catch // catch handler for a key that is missing and no longer valid
                         {
-                            Settings.regkeySettings = Registry.LocalMachine.OpenSubKey(strBaseSettingsKey);
+                            Settings.regkeySettings = Registry.LocalMachine.OpenSubKey(Settings.strBaseSettingsKey);
                         }
                     }
                 }
@@ -56,7 +56,7 @@ namespace Lithnet.idlelogoff
                     if (Settings.regkeySettingsWritable == null)
                     {
 
-                        Settings.regkeySettingsWritable = Registry.LocalMachine.CreateSubKey(strBaseSettingsKey);
+                        Settings.regkeySettingsWritable = Registry.LocalMachine.CreateSubKey(Settings.strBaseSettingsKey);
                     }
                     else
                     {
@@ -66,7 +66,7 @@ namespace Lithnet.idlelogoff
                         }
                         catch // catch handler for a key that is missing and no longer valid
                         {
-                            Settings.regkeySettingsWritable = Registry.LocalMachine.CreateSubKey(strBaseSettingsKey);
+                            Settings.regkeySettingsWritable = Registry.LocalMachine.CreateSubKey(Settings.strBaseSettingsKey);
                         }
                     }
                 }
@@ -87,7 +87,7 @@ namespace Lithnet.idlelogoff
             {
                 if (Settings.regkeyMachinePolicy == null)
                 {
-                    Settings.regkeyMachinePolicy = Registry.LocalMachine.OpenSubKey(strBasePolicyKey, false);
+                    Settings.regkeyMachinePolicy = Registry.LocalMachine.OpenSubKey(Settings.strBasePolicyKey, false);
                 }
                 else
                 {
@@ -97,7 +97,7 @@ namespace Lithnet.idlelogoff
                     }
                     catch // catch handler for a key that is missing and no longer valid
                     {
-                        Settings.regkeyMachinePolicy = Registry.LocalMachine.OpenSubKey(strBasePolicyKey, false);
+                        Settings.regkeyMachinePolicy = Registry.LocalMachine.OpenSubKey(Settings.strBasePolicyKey, false);
                     }
                 }
                 return Settings.regkeyMachinePolicy;
@@ -111,7 +111,7 @@ namespace Lithnet.idlelogoff
             {
                 if (Settings.regkeyUserPolicy == null)
                 {
-                    Settings.regkeyUserPolicy = Registry.CurrentUser.OpenSubKey(strBasePolicyKey, false);
+                    Settings.regkeyUserPolicy = Registry.CurrentUser.OpenSubKey(Settings.strBasePolicyKey, false);
                 }
                 else
                 {
@@ -121,7 +121,7 @@ namespace Lithnet.idlelogoff
                     }
                     catch // catch handler for a key that is missing and no longer valid
                     {
-                        Settings.regkeyUserPolicy = Registry.CurrentUser.OpenSubKey(strBasePolicyKey, false);
+                        Settings.regkeyUserPolicy = Registry.CurrentUser.OpenSubKey(Settings.strBasePolicyKey, false);
                     }
                 }
 
@@ -133,27 +133,27 @@ namespace Lithnet.idlelogoff
         {
             object value = null;
 
-            if (MachinePolicyKey != null)
+            if (Settings.MachinePolicyKey != null)
             {
-                value = MachinePolicyKey.GetValue(name, null);
+                value = Settings.MachinePolicyKey.GetValue(name, null);
                 if (value != null)
                 {
                     return value;
                 }
             }
 
-            if (UserPolicyKey != null)
+            if (Settings.UserPolicyKey != null)
             {
-                value = UserPolicyKey.GetValue(name, null);
+                value = Settings.UserPolicyKey.GetValue(name, null);
                 if (value != null)
                 {
                     return value;
                 }
             }
 
-            if (SettingsKeyReadOnly != null)
+            if (Settings.SettingsKeyReadOnly != null)
             {
-                value = SettingsKeyReadOnly.GetValue(name, null);
+                value = Settings.SettingsKeyReadOnly.GetValue(name, null);
             }
 
             return value;
@@ -163,18 +163,18 @@ namespace Lithnet.idlelogoff
         {
             object value = null;
 
-            if (MachinePolicyKey != null)
+            if (Settings.MachinePolicyKey != null)
             {
-                value = MachinePolicyKey.GetValue(name, null);
+                value = Settings.MachinePolicyKey.GetValue(name, null);
                 if (value != null)
                 {
                     return true;
                 }
             }
 
-            if (UserPolicyKey != null)
+            if (Settings.UserPolicyKey != null)
             {
-                value = UserPolicyKey.GetValue(name, null);
+                value = Settings.UserPolicyKey.GetValue(name, null);
                 if (value != null)
                 {
                     return true;
@@ -186,7 +186,7 @@ namespace Lithnet.idlelogoff
 
         private static void SaveSetting(string valueName, object value, RegistryValueKind valuetype)
         {
-            SettingsKeyWriteable.SetValue(valueName, value, valuetype);
+            Settings.SettingsKeyWriteable.SetValue(valueName, value, valuetype);
         }
 
         public static int IdleLimit
@@ -196,7 +196,7 @@ namespace Lithnet.idlelogoff
                 object regvalue = null;
                 int retval = 60;
 
-                regvalue = GetPolicyOrSetting("IdleLimit");
+                regvalue = Settings.GetPolicyOrSetting("IdleLimit");
                 if (regvalue != null)
                 {
                     try
@@ -211,8 +211,12 @@ namespace Lithnet.idlelogoff
 
                 return retval;
             }
-            set => SaveSetting("IdleLimit", value, RegistryValueKind.DWord);
+            set => Settings.SaveSetting("IdleLimit", value, RegistryValueKind.DWord);
         }
+
+        internal static int WarningPeriodMilliseconds => Settings.IdleLimitMilliseconds - (Settings.WarningPeriod * 1000);
+
+        internal static int IdleLimitMilliseconds => Settings.IdleLimit * 60 * 1000;
 
         public static int WarningPeriod
         {
@@ -221,7 +225,7 @@ namespace Lithnet.idlelogoff
                 object regvalue = null;
                 int retval = 0;
 
-                regvalue = GetPolicyOrSetting("WarningPeriod");
+                regvalue = Settings.GetPolicyOrSetting("WarningPeriod");
                 if (regvalue != null)
                 {
                     try
@@ -236,7 +240,7 @@ namespace Lithnet.idlelogoff
 
                 return Math.Max(retval, 0);
             }
-            set => SaveSetting("WarningPeriod", value, RegistryValueKind.DWord);
+            set => Settings.SaveSetting("WarningPeriod", value, RegistryValueKind.DWord);
         }
 
         public static bool Debug
@@ -251,7 +255,7 @@ namespace Lithnet.idlelogoff
                 object value = null;
                 bool status = false;
 
-                value = GetPolicyOrSetting("Debug");
+                value = Settings.GetPolicyOrSetting("Debug");
                 if (value != null)
                 {
                     try
@@ -279,7 +283,7 @@ namespace Lithnet.idlelogoff
                 object value = null;
                 bool status = false;
 
-                value = GetPolicyOrSetting("Enabled");
+                value = Settings.GetPolicyOrSetting("Enabled");
                 if (value != null)
                 {
                     try
@@ -297,7 +301,7 @@ namespace Lithnet.idlelogoff
                 }
                 return status;
             }
-            set => SaveSetting("Enabled", Convert.ToInt32(value), RegistryValueKind.DWord);
+            set => Settings.SaveSetting("Enabled", Convert.ToInt32(value), RegistryValueKind.DWord);
         }
 
         public static IdleTimeoutAction Action
@@ -321,7 +325,7 @@ namespace Lithnet.idlelogoff
 
                 return (IdleTimeoutAction)retval;
             }
-            set => SaveSetting("Action", (int)value, RegistryValueKind.DWord);
+            set => Settings.SaveSetting("Action", (int)value, RegistryValueKind.DWord);
         }
 
         public static bool IgnoreDisplayRequested
@@ -331,7 +335,7 @@ namespace Lithnet.idlelogoff
                 object value = null;
                 bool status = false;
 
-                value = GetPolicyOrSetting("IgnoreDisplayRequested");
+                value = Settings.GetPolicyOrSetting("IgnoreDisplayRequested");
                 if (value != null)
                 {
                     try
@@ -349,7 +353,7 @@ namespace Lithnet.idlelogoff
                 }
                 return status;
             }
-            set => SaveSetting("IgnoreDisplayRequested", Convert.ToInt32(value), RegistryValueKind.DWord);
+            set => Settings.SaveSetting("IgnoreDisplayRequested", Convert.ToInt32(value), RegistryValueKind.DWord);
         }
 
 

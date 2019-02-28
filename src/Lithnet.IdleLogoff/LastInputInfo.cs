@@ -6,6 +6,6 @@
     public struct LastInputInfo
     {
         public int cbSize;
-        public int dwTime;
+        public uint dwTime;
     }
 }

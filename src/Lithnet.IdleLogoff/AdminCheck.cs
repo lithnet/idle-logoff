@@ -16,7 +16,7 @@ namespace Lithnet.idlelogoff
             startInfo.WorkingDirectory = Environment.CurrentDirectory;
             startInfo.FileName = Application.ExecutablePath;
 
-            if (System.Diagnostics.Debugger.IsAttached)
+            if (Debugger.IsAttached)
             {
                 startInfo.Arguments = "/attach";
             }

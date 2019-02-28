@@ -50,7 +50,7 @@ namespace Lithnet.idlelogoff
         {
             ExecutionState state;
 
-            int retval = CallNtPowerInformation(PowerInformationLevel.SystemExecutionState, IntPtr.Zero, 0, out state, sizeof(ExecutionState));
+            int retval = NativeMethods.CallNtPowerInformation(PowerInformationLevel.SystemExecutionState, IntPtr.Zero, 0, out state, sizeof(ExecutionState));
 
             if (retval != 0)
             {
@@ -60,12 +60,12 @@ namespace Lithnet.idlelogoff
             return (state.HasFlag(ExecutionState.DisplayRequired));
         }
 
-        public static int GetLastInputTime()
+        public static uint GetLastInputTime()
         {
             LastInputInfo info = new LastInputInfo();
             info.cbSize = Marshal.SizeOf(info);
 
-            if (!GetLastInputInfo(ref info))
+            if (!NativeMethods.GetLastInputInfo(ref info))
             {
                 throw new Win32Exception(Marshal.GetLastWin32Error());
             }
@@ -96,7 +96,7 @@ namespace Lithnet.idlelogoff
                 {
                     try
                     {
-                        ElevatePrivileges();
+                        NativeMethods.ElevatePrivileges();
                         elevated = true;
                     }
                     catch (Exception ex)
@@ -133,7 +133,7 @@ namespace Lithnet.idlelogoff
                 }
                 else
                 {
-                    if (!ExitWindowsEx(flags, 0))
+                    if (!NativeMethods.ExitWindowsEx(flags, 0))
                     {
                         throw new Win32Exception(Marshal.GetLastWin32Error());
                     }
@@ -150,12 +150,12 @@ namespace Lithnet.idlelogoff
 
         private static void ElevatePrivileges()
         {
-            IntPtr currentProcess = GetCurrentProcess();
+            IntPtr currentProcess = NativeMethods.GetCurrentProcess();
             IntPtr tokenHandle = IntPtr.Zero;
 
             try
             {
-                int result = OpenProcessToken(currentProcess, NativeMethods.TokenAdjustPrivileges | NativeMethods.TokenQuery, ref tokenHandle);
+                int result = NativeMethods.OpenProcessToken(currentProcess, NativeMethods.TokenAdjustPrivileges | NativeMethods.TokenQuery, ref tokenHandle);
 
                 if (result == 0)
                 {
@@ -167,13 +167,13 @@ namespace Lithnet.idlelogoff
                 tokenPrivileges.Luid = 0;
                 tokenPrivileges.Attributes = NativeMethods.SePrivilegeEnabled;
 
-                result = LookupPrivilegeValue(null, NativeMethods.SeShutdownName, ref tokenPrivileges.Luid);
+                result = NativeMethods.LookupPrivilegeValue(null, NativeMethods.SeShutdownName, ref tokenPrivileges.Luid);
                 if (result == 0)
                 {
                     throw new Win32Exception(Marshal.GetLastWin32Error());
                 }
 
-                result = AdjustTokenPrivileges(tokenHandle, false, ref tokenPrivileges, 0, IntPtr.Zero, IntPtr.Zero);
+                result = NativeMethods.AdjustTokenPrivileges(tokenHandle, false, ref tokenPrivileges, 0, IntPtr.Zero, IntPtr.Zero);
                 if (result == 0)
                 {
                     throw new Win32Exception(Marshal.GetLastWin32Error());
@@ -183,12 +183,12 @@ namespace Lithnet.idlelogoff
             {
                 if (currentProcess != IntPtr.Zero)
                 {
-                    CloseHandle(currentProcess);
+                    NativeMethods.CloseHandle(currentProcess);
                 }
 
                 if (tokenHandle != IntPtr.Zero)
                 {
-                    CloseHandle(tokenHandle);
+                    NativeMethods.CloseHandle(tokenHandle);
                 }
             }
         }

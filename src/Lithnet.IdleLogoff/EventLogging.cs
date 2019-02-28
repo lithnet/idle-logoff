@@ -17,11 +17,11 @@
 
         public static void InitEventLog()
         {
-            if (!IsEventSourceRegistered())
+            if (!EventLogging.IsEventSourceRegistered())
             {
-                if (!TryRegisterEventSource())
+                if (!EventLogging.TryRegisterEventSource())
                 {
-                    LogEnabled = false;
+                    EventLogging.LogEnabled = false;
                 }
             }
         }
@@ -31,7 +31,7 @@
             if (!EventLog.SourceExists(EventLogging.EvtSource))
             {
                 EventLog.CreateEventSource(EventLogging.EvtSource, "Application");
-                TryLogEvent("The event log source was registered", EventLogging.EvtRegisteredsource);
+                EventLogging.TryLogEvent("The event log source was registered", EventLogging.EvtRegisteredsource);
             }
         }
 
@@ -56,9 +56,9 @@
         {
             try
             {
-                if (!IsEventSourceRegistered())
+                if (!EventLogging.IsEventSourceRegistered())
                 {
-                    RegisterEventSource();
+                    EventLogging.RegisterEventSource();
                     return true;
                 }
                 else
@@ -74,13 +74,13 @@
 
         public static void LogEvent(string eventText, int eventId)
         {
-            LogEvent(eventText, eventId, EventLogEntryType.Information);
+            EventLogging.LogEvent(eventText, eventId, EventLogEntryType.Information);
         }
 
         public static void LogEvent(string eventText, int eventID, EventLogEntryType entryType)
         {
             Trace.WriteLine($"{entryType}: {eventID}: {eventText}");
-            if (LogEnabled)
+            if (EventLogging.LogEnabled)
             {
                 EventLog.WriteEntry(EventLogging.EvtSource, eventText, entryType, eventID);
             }
@@ -90,7 +90,7 @@
         {
             try
             {
-                LogEvent(eventText, eventID, entryType);
+                EventLogging.LogEvent(eventText, eventID, entryType);
                 return true;
             }
             catch
@@ -101,7 +101,7 @@
 
         public static bool TryLogEvent(string eventText, int eventID)
         {
-            return TryLogEvent(eventText, eventID, EventLogEntryType.Information);
+            return EventLogging.TryLogEvent(eventText, eventID, EventLogEntryType.Information);
         }
     }
 }
