@@ -145,7 +145,7 @@ namespace Lithnet.idlelogoff
                 {
                     Program.expectedIdleActionTime = DateTime.Now.AddMilliseconds(Settings.IdleLimitMilliseconds);
                     Trace.WriteLine($"Set expected idle action time to: {Program.expectedIdleActionTime}");
-                    if (Settings.WarningPeriod > 0)
+                    if (Settings.WarningEnabled && Settings.WarningPeriod > 0)
                     {
                         Program.expectedWarningTime = DateTime.Now.AddMilliseconds(Settings.WarningPeriodMilliseconds);
                         Trace.WriteLine($"Set expected warning time to: {Program.expectedWarningTime}");
@@ -154,7 +154,8 @@ namespace Lithnet.idlelogoff
                     Program.isIdle = true;
                 }
 
-                if (Settings.WarningPeriod > 0
+                if (Settings.WarningEnabled
+                    && Settings.WarningPeriod > 0
                     && DateTime.Now >= Program.expectedWarningTime
                     && DateTime.Now < Program.expectedIdleActionTime)
                 {

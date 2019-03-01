@@ -17,7 +17,7 @@ namespace Lithnet.idlelogoff
 
         private void RefreshUI()
         {
-            this.lbProductName.Text = "Lithnet.idlelogoff";
+            this.lbProductName.Text = "Lithnet Idle Logoff";
             this.lbProductVersion.Text = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString(3);
 
             this.ckEnableIdleLogoff.Checked = Settings.Enabled;
@@ -45,12 +45,18 @@ namespace Lithnet.idlelogoff
                 this.udMinutes.Value = 60;
             }
 
+            this.udMinutes.Enabled = !Settings.IsSettingFromPolicy(nameof(Settings.IdleLimit));
+
+            this.ckShowWarning.Checked = Settings.WarningEnabled;
+            this.ckShowWarning.Enabled = !Settings.IsSettingFromPolicy(nameof(Settings.WarningEnabled));
+
+            this.udWarning.Enabled = !Settings.IsSettingFromPolicy(nameof(Settings.WarningPeriod));
             this.udWarning.Value = Settings.WarningPeriod;
 
-            this.udMinutes.Enabled = !Settings.IsSettingFromPolicy(nameof(Settings.IdleLimit));
-            this.udWarning.Enabled = !Settings.IsSettingFromPolicy(nameof(Settings.WarningPeriod));
+            this.txtWarningMessage.Enabled = !Settings.IsSettingFromPolicy(nameof(Settings.WarningMessage));
+            this.txtWarningMessage.Text = Settings.WarningMessage;
 
-            if (!this.udMinutes.Enabled | !this.ckEnableIdleLogoff.Enabled | !this.ckIgnoreDisplayRequested.Enabled | !this.udWarning.Enabled)
+            if (!this.udMinutes.Enabled | !this.ckEnableIdleLogoff.Enabled | !this.ckIgnoreDisplayRequested.Enabled | !this.udWarning.Enabled | !this.txtWarningMessage.Enabled | !this.ckShowWarning.Enabled)
             {
                 this.lbGPControlled.Visible = true;
             }
@@ -67,7 +73,7 @@ namespace Lithnet.idlelogoff
 
                 if (this.udMinutes.Enabled)
                 {
-                    Settings.IdleLimit = (int) this.udMinutes.Value;
+                    Settings.IdleLimit = (int)this.udMinutes.Value;
                 }
 
                 if (this.ckIgnoreDisplayRequested.Enabled)
@@ -75,9 +81,19 @@ namespace Lithnet.idlelogoff
                     Settings.IgnoreDisplayRequested = this.ckIgnoreDisplayRequested.Checked;
                 }
 
+                if (this.ckShowWarning.Enabled)
+                {
+                    Settings.WarningEnabled = this.ckShowWarning.Checked;
+                }
+
+                if (this.txtWarningMessage.Enabled)
+                {
+                    Settings.WarningMessage = this.txtWarningMessage.Text;
+                }
+
                 if (this.udWarning.Enabled)
                 {
-                    Settings.WarningPeriod = (int) this.udWarning.Value;
+                    Settings.WarningPeriod = (int)this.udWarning.Value;
                 }
 
                 if (this.cbAction.Enabled)
@@ -123,6 +139,11 @@ namespace Lithnet.idlelogoff
         private void btCancel_Click(object sender, EventArgs e)
         {
             Environment.Exit(0);
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

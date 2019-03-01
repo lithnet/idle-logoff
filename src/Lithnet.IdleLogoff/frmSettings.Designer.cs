@@ -42,6 +42,9 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.udWarning = new System.Windows.Forms.NumericUpDown();
+            this.ckShowWarning = new System.Windows.Forms.CheckBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.txtWarningMessage = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.udMinutes)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udWarning)).BeginInit();
             this.SuspendLayout();
@@ -58,7 +61,7 @@
             // 
             // udMinutes
             // 
-            this.udMinutes.Location = new System.Drawing.Point(229, 53);
+            this.udMinutes.Location = new System.Drawing.Point(323, 53);
             this.udMinutes.Maximum = new decimal(new int[] {
             35791,
             0,
@@ -89,7 +92,7 @@
             // 
             // btOK
             // 
-            this.btOK.Location = new System.Drawing.Point(345, 235);
+            this.btOK.Location = new System.Drawing.Point(345, 297);
             this.btOK.Name = "btOK";
             this.btOK.Size = new System.Drawing.Size(71, 24);
             this.btOK.TabIndex = 4;
@@ -100,7 +103,7 @@
             // btCancel
             // 
             this.btCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btCancel.Location = new System.Drawing.Point(268, 235);
+            this.btCancel.Location = new System.Drawing.Point(268, 297);
             this.btCancel.Name = "btCancel";
             this.btCancel.Size = new System.Drawing.Size(71, 24);
             this.btCancel.TabIndex = 3;
@@ -111,7 +114,7 @@
             // lbProductName
             // 
             this.lbProductName.AutoSize = true;
-            this.lbProductName.Location = new System.Drawing.Point(8, 237);
+            this.lbProductName.Location = new System.Drawing.Point(8, 299);
             this.lbProductName.Name = "lbProductName";
             this.lbProductName.Size = new System.Drawing.Size(99, 13);
             this.lbProductName.TabIndex = 4;
@@ -119,7 +122,7 @@
             // 
             // lbProductVersion
             // 
-            this.lbProductVersion.Location = new System.Drawing.Point(8, 250);
+            this.lbProductVersion.Location = new System.Drawing.Point(8, 312);
             this.lbProductVersion.Name = "lbProductVersion";
             this.lbProductVersion.Size = new System.Drawing.Size(119, 13);
             this.lbProductVersion.TabIndex = 5;
@@ -130,7 +133,7 @@
             this.lbGPControlled.Dock = System.Windows.Forms.DockStyle.Top;
             this.lbGPControlled.Location = new System.Drawing.Point(0, 0);
             this.lbGPControlled.Name = "lbGPControlled";
-            this.lbGPControlled.Size = new System.Drawing.Size(427, 15);
+            this.lbGPControlled.Size = new System.Drawing.Size(434, 15);
             this.lbGPControlled.TabIndex = 6;
             this.lbGPControlled.Text = "Some settings are currently configured by group policy and cannot be modified";
             this.lbGPControlled.Visible = false;
@@ -145,9 +148,9 @@
             // 
             // ckIgnoreDisplayRequested
             // 
-            this.ckIgnoreDisplayRequested.Location = new System.Drawing.Point(39, 165);
+            this.ckIgnoreDisplayRequested.Location = new System.Drawing.Point(38, 232);
             this.ckIgnoreDisplayRequested.Name = "ckIgnoreDisplayRequested";
-            this.ckIgnoreDisplayRequested.Size = new System.Drawing.Size(315, 34);
+            this.ckIgnoreDisplayRequested.Size = new System.Drawing.Size(378, 34);
             this.ckIgnoreDisplayRequested.TabIndex = 8;
             this.ckIgnoreDisplayRequested.Text = "Ignore sleep prevention requests from applications such as media playback";
             this.ckIgnoreDisplayRequested.UseVisualStyleBackColor = true;
@@ -156,7 +159,7 @@
             // 
             this.cbAction.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbAction.FormattingEnabled = true;
-            this.cbAction.Location = new System.Drawing.Point(156, 83);
+            this.cbAction.Location = new System.Drawing.Point(250, 76);
             this.cbAction.Name = "cbAction";
             this.cbAction.Size = new System.Drawing.Size(166, 21);
             this.cbAction.TabIndex = 10;
@@ -164,7 +167,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(35, 84);
+            this.label2.Location = new System.Drawing.Point(37, 79);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(40, 13);
             this.label2.TabIndex = 11;
@@ -172,15 +175,15 @@
             // 
             // label3
             // 
-            this.label3.Location = new System.Drawing.Point(35, 110);
+            this.label3.Location = new System.Drawing.Point(37, 144);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(188, 32);
+            this.label3.Size = new System.Drawing.Size(282, 20);
             this.label3.TabIndex = 13;
-            this.label3.Text = "Show a warning before idle action is taken (seconds)";
+            this.label3.Text = "Duration of warning message (seconds)";
             // 
             // udWarning
             // 
-            this.udWarning.Location = new System.Drawing.Point(229, 110);
+            this.udWarning.Location = new System.Drawing.Point(323, 142);
             this.udWarning.Maximum = new decimal(new int[] {
             35791,
             0,
@@ -195,13 +198,43 @@
             0,
             0});
             // 
+            // ckShowWarning
+            // 
+            this.ckShowWarning.AutoSize = true;
+            this.ckShowWarning.Location = new System.Drawing.Point(38, 122);
+            this.ckShowWarning.Name = "ckShowWarning";
+            this.ckShowWarning.Size = new System.Drawing.Size(251, 17);
+            this.ckShowWarning.TabIndex = 14;
+            this.ckShowWarning.Text = "Show a warning message before idle action";
+            this.ckShowWarning.UseVisualStyleBackColor = true;
+            this.ckShowWarning.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(37, 164);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(139, 13);
+            this.label4.TabIndex = 15;
+            this.label4.Text = "Custom warning message";
+            // 
+            // txtWarningMessage
+            // 
+            this.txtWarningMessage.Location = new System.Drawing.Point(40, 182);
+            this.txtWarningMessage.Name = "txtWarningMessage";
+            this.txtWarningMessage.Size = new System.Drawing.Size(378, 22);
+            this.txtWarningMessage.TabIndex = 16;
+            // 
             // FrmSettings
             // 
             this.AcceptButton = this.btOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btCancel;
-            this.ClientSize = new System.Drawing.Size(427, 271);
+            this.ClientSize = new System.Drawing.Size(434, 334);
+            this.Controls.Add(this.txtWarningMessage);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.ckShowWarning);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.udWarning);
             this.Controls.Add(this.label2);
@@ -246,5 +279,8 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.NumericUpDown udWarning;
+        private System.Windows.Forms.CheckBox ckShowWarning;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TextBox txtWarningMessage;
     }
 }

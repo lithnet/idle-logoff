@@ -60,18 +60,12 @@ namespace lithnet.idlelogoff
         {
             if (this.LogoffDateTime > DateTime.Now)
             {
-                this.lbWarning.Text = string.Format("Your session has been idle for too long, and you will be logged out in {0} seconds. Move the mouse or press any key to cancel", (int) ((this.LogoffDateTime.Subtract(DateTime.Now)).TotalSeconds));
+                this.lbWarning.Text = string.Format(Settings.WarningMessage, (int) ((this.LogoffDateTime.Subtract(DateTime.Now)).TotalSeconds));
             }
             else
             {
-                this.lbWarning.Text = "Your session has been idle for too long, and you will be logged out soon. Move the mouse or press any key to cancel";
+                this.lbWarning.Text = string.Empty;
             }
-        }
-
-        private void LogoffWarning_MouseMove(object sender, MouseEventArgs e)
-        {
-            Trace.WriteLine("Hiding warning window on mouse move");
-            this.Hide();
         }
 
         private void LogoffWarning_KeyPress(object sender, KeyPressEventArgs e)

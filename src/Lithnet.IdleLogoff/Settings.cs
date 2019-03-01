@@ -304,6 +304,52 @@ namespace Lithnet.idlelogoff
             set => Settings.SaveSetting("Enabled", Convert.ToInt32(value), RegistryValueKind.DWord);
         }
 
+        public static bool WarningEnabled
+        {
+            get
+            {
+                object value = null;
+                bool status = false;
+
+                value = Settings.GetPolicyOrSetting("WarningEnabled");
+                if (value != null)
+                {
+                    try
+                    {
+                        if ((int)value == 1)
+                        {
+                            status = true;
+                        }
+                    }
+                    catch
+                    {
+                        //unable to cast 
+                    }
+
+                }
+                return status;
+            }
+            set => Settings.SaveSetting("WarningEnabled", Convert.ToInt32(value), RegistryValueKind.DWord);
+        }
+
+        public static string WarningMessage
+        {
+            get
+            {
+                string value = Settings.GetPolicyOrSetting("WarningMessage") as string;
+
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    return "Your session has been idle for too long, and you will be logged out in {0} seconds";
+                }
+                else
+                {
+                    return value;
+                }
+            }
+            set => Settings.SaveSetting("WarningMessage", value, RegistryValueKind.String);
+        }
+
         public static IdleTimeoutAction Action
         {
             get

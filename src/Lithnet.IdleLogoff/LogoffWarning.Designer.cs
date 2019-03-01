@@ -42,10 +42,11 @@
             this.lbWarning.Size = new System.Drawing.Size(431, 71);
             this.lbWarning.TabIndex = 0;
             this.lbWarning.Text = "Your session has been idle for too long, and you will be logged out in {0} second" +
-    "s. Move the mouse or press any key to cancel";
+    "s\r\n";
             // 
             // button1
             // 
+            this.button1.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.button1.Location = new System.Drawing.Point(214, 111);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(104, 34);
@@ -82,7 +83,6 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Idle session logoff";
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.LogoffWarning_KeyPress);
-            this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.LogoffWarning_MouseMove);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 

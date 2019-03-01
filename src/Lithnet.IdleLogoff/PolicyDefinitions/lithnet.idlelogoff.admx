@@ -13,51 +13,28 @@
     </definitions>
   </supportedOn>
   <categories>
-    <category name="CAT_78275968_599A_4E3F_BAD6_07C70894AF09" displayName="$(string.CAT_78275968_599A_4E3F_BAD6_07C70894AF09)">
+    <category name="cat_idle_logoff" displayName="$(string.cat_idle_logoff)">
       <parentCategory ref="lithnet:CAT_300017F2_090D_4E59_A535_01350C2E0428" />
     </category>
   </categories>
   <policies>
-    <policy name="POL_978C1C26_0621_4860_A000_61A23A440151" class="Machine" displayName="$(string.POL_978C1C26_0621_4860_A000_61A23A440151)" presentation="$(presentation.POL_978C1C26_0621_4860_A000_61A23A440151)" key="Software\Policies\Lithnet\IdleLogoff" valueName="Enabled">
-      <parentCategory ref="CAT_78275968_599A_4E3F_BAD6_07C70894AF09" />
+
+
+    <policy name="pol_show_warning_message" class="Both" displayName="$(string.pol_show_warning_message)" presentation="$(presentation.pol_show_warning_message)" key="Software\Policies\Lithnet\IdleLogoff" valueName="WarningEnabled" explainText="$(string.pol_show_warning_message_help)">
+      <parentCategory ref="cat_idle_logoff" />
       <supportedOn ref="TS_SUPPORTED_WindowsXP" />
       <elements>
-        <decimal id="DXT_7E914D9D_203C_40DF_8C49_93B29308A6B2" key="Software\Policies\Lithnet\IdleLogoff" valueName="IdleLimit" minValue="1" />
-        <decimal id="DXT_34f51d8da07c479bae41dd8db061812f" key="Software\Policies\Lithnet\IdleLogoff" valueName="WarningPeriod" minValue="0" />
-        <boolean id="DXT_B357DAA7-0013-45D9-94DC-E91206837C29" key="Software\Policies\Lithnet\IdleLogoff" valueName="IgnoreDisplayRequested">
-          <trueValue>
-            <decimal value="1" />
-          </trueValue>
-          <falseValue>
-            <decimal value="0" />
-          </falseValue>
-        </boolean>
-        <enum id="DXT_3E1833A6-D761-40B5-8BF9-5C03F320C86B" key="Software\Policies\Lithnet\IdleLogoff" valueName="Action">
-          <item displayName="$(string.POL_F3930A2B-33F8-4CE6-B6AC-14F188507B77)">
-            <value>
-              <decimal value="0" />
-            </value>
-          </item>
-          <item displayName="$(string.POL_D61A5346-B53C-42FB-99FF-6519F18B281C)">
-            <value>
-              <decimal value="1" />
-            </value>
-          </item>
-          <item displayName="$(string.POL_582D5654-4165-42D2-BF83-6A182FF67587)">
-            <value>
-              <decimal value="2" />
-            </value>
-          </item>
-        </enum>
+        <decimal id="txt_warning_period" key="Software\Policies\Lithnet\IdleLogoff" valueName="WarningPeriod" minValue="10" />
+        <text id="txt_warning_message" key="Software\Policies\Lithnet\IdleLogoff" valueName="WarningMessage" required="false"/>
       </elements>
     </policy>
-    <policy name="POL_1D519699-D182-4B28-A489-1F7DE9DB6DE5" class="User" displayName="$(string.POL_978C1C26_0621_4860_A000_61A23A440151)" presentation="$(presentation.POL_1D519699-D182-4B28-A489-1F7DE9DB6DE5)" key="Software\Policies\Lithnet\IdleLogoff" valueName="Enabled">
-      <parentCategory ref="CAT_78275968_599A_4E3F_BAD6_07C70894AF09" />
+
+    <policy name="pol_enable_idle_logoff" class="Both" displayName="$(string.pol_enable_idle_logoff)" presentation="$(presentation.pol_enable_idle_logoff)" key="Software\Policies\Lithnet\IdleLogoff" valueName="Enabled">
+      <parentCategory ref="cat_idle_logoff" />
       <supportedOn ref="TS_SUPPORTED_WindowsXP" />
       <elements>
-        <decimal id="DXT_B29D2480-E131-4C23-B4D4-F55CAA13C2FF" key="Software\Policies\Lithnet\IdleLogoff" valueName="IdleLimit" minValue="1" />
-        <decimal id="DXT_8ab92f9f21e642dd9c343c1f185c8b4b" key="Software\Policies\Lithnet\IdleLogoff" valueName="WarningPeriod" minValue="0" />
-        <boolean id="DXT_CFF2EAC7-2034-47F9-B3CE-8D10C73FCA81" key="Software\Policies\Lithnet\IdleLogoff" valueName="IgnoreDisplayRequested">
+        <decimal id="txt_idle_limit" key="Software\Policies\Lithnet\IdleLogoff" valueName="IdleLimit" minValue="1" />
+        <boolean id="ck_ignore_display_requested" key="Software\Policies\Lithnet\IdleLogoff" valueName="IgnoreDisplayRequested">
           <trueValue>
             <decimal value="1" />
           </trueValue>
@@ -65,18 +42,18 @@
             <decimal value="0" />
           </falseValue>
         </boolean>
-        <enum id="DXT_6C79F5D5-6DB7-4194-BCB5-7CF6752263EA" key="Software\Policies\Lithnet\IdleLogoff" valueName="Action">
-          <item displayName="$(string.POL_F3930A2B-33F8-4CE6-B6AC-14F188507B77)">
+        <enum id="dd_idle_action" key="Software\Policies\Lithnet\IdleLogoff" valueName="Action">
+          <item displayName="$(string.string_logoff)">
             <value>
               <decimal value="0" />
             </value>
           </item>
-          <item displayName="$(string.POL_D61A5346-B53C-42FB-99FF-6519F18B281C)">
+          <item displayName="$(string.string_reboot)">
             <value>
               <decimal value="1" />
             </value>
           </item>
-          <item displayName="$(string.POL_582D5654-4165-42D2-BF83-6A182FF67587)">
+          <item displayName="$(string.string_shutdown)">
             <value>
               <decimal value="2" />
             </value>
