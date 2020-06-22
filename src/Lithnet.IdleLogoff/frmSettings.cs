@@ -117,18 +117,8 @@ namespace Lithnet.idlelogoff
                     MessageBox.Show("An error occurred registering the event source. Event log messages will not be logged for application events\n\n" + ex.Message);
                 }
             }
-
-            try
-            {
-                Settings.CreateStartupRegKey();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("An error occurred while configuring the tool to automatically run at logon. The tool must be started with the '/start' switch for each user that logs on to take effect\n\n" + ex.Message);
-            }
-
+          
             Environment.Exit(0);
-
         }
 
         private void lbHiddenRefresh_Click(object sender, EventArgs e)

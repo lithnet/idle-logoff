@@ -260,7 +260,7 @@ namespace Lithnet.idlelogoff
                 {
                     try
                     {
-                        if ((int) value == 1)
+                        if ((int)value == 1)
                         {
                             status = true;
                         }
@@ -422,20 +422,6 @@ namespace Lithnet.idlelogoff
                 Settings.regkeySettings.Close();
                 Settings.regkeySettings = null;
             }
-        }
-
-        public static void CreateStartupRegKey()
-        {
-            RegistryKey hklmRun = Registry.LocalMachine.CreateSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Run");
-            string cmdline = "\"" + System.Windows.Forms.Application.ExecutablePath + "\" /start";
-
-            hklmRun.SetValue("Lithnet.idlelogoff", cmdline);
-        }
-
-        public static void DeleteStartupRegKey()
-        {
-            RegistryKey hklmRun = Registry.LocalMachine.CreateSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Run");
-            hklmRun.DeleteValue("Lithnet.idlelogoff", false);
         }
     }
 }

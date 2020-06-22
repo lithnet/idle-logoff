@@ -82,25 +82,9 @@ namespace Lithnet.idlelogoff
                 {
                     //skip over the executable itself
                 }
-                else if (arg.Equals("/register", StringComparison.OrdinalIgnoreCase))
-                {
-                    try
-                    {
-                        Program.PerformApplicationRegistration();
-                        Environment.Exit(0);
-                    }
-                    catch
-                    {
-                        Environment.Exit(1);
-                    }
-                }
                 else if (arg.Equals("/start", StringComparison.OrdinalIgnoreCase))
                 {
                     Program.backgroundMode = true;
-                }
-                else if (arg.Equals("/attach", StringComparison.OrdinalIgnoreCase))
-                {
-                    Debugger.Launch();
                 }
                 else
                 {
@@ -240,29 +224,6 @@ namespace Lithnet.idlelogoff
             {
                 Trace.WriteLine("Hiding warning window");
                 Program.warningDialog.Hide();
-            }
-        }
-
-        private static void PerformApplicationRegistration()
-        {
-            try
-            {
-                EventLogging.RegisterEventSource();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Unable to register the event source. Ensure you are running the application with administrative rights.\n\n" + ex.Message);
-                throw;
-            }
-
-            try
-            {
-                Settings.CreateStartupRegKey();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Unable to register the application. Ensure you are running the application with administrative rights.\n\n" + ex.Message);
-                throw;
             }
         }
 
