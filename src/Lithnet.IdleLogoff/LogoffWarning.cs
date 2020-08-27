@@ -60,7 +60,14 @@ namespace lithnet.idlelogoff
         {
             if (this.LogoffDateTime > DateTime.Now)
             {
-                this.lbWarning.Text = string.Format(Settings.WarningMessage, (int) ((this.LogoffDateTime.Subtract(DateTime.Now)).TotalSeconds));
+                string message = Settings.WarningMessage;
+
+                if (message.Contains("{0}"))
+                {
+                    message = string.Format(message, (int)((this.LogoffDateTime.Subtract(DateTime.Now)).TotalSeconds));
+                }
+
+                this.lbWarning.Text = message;
             }
             else
             {

@@ -92,7 +92,7 @@
             // 
             // btOK
             // 
-            this.btOK.Location = new System.Drawing.Point(345, 297);
+            this.btOK.Location = new System.Drawing.Point(366, 297);
             this.btOK.Name = "btOK";
             this.btOK.Size = new System.Drawing.Size(71, 24);
             this.btOK.TabIndex = 4;
@@ -103,7 +103,7 @@
             // btCancel
             // 
             this.btCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btCancel.Location = new System.Drawing.Point(268, 297);
+            this.btCancel.Location = new System.Drawing.Point(289, 297);
             this.btCancel.Name = "btCancel";
             this.btCancel.Size = new System.Drawing.Size(71, 24);
             this.btCancel.TabIndex = 3;
@@ -133,7 +133,7 @@
             this.lbGPControlled.Dock = System.Windows.Forms.DockStyle.Top;
             this.lbGPControlled.Location = new System.Drawing.Point(0, 0);
             this.lbGPControlled.Name = "lbGPControlled";
-            this.lbGPControlled.Size = new System.Drawing.Size(434, 15);
+            this.lbGPControlled.Size = new System.Drawing.Size(453, 15);
             this.lbGPControlled.TabIndex = 6;
             this.lbGPControlled.Text = "Some settings are currently configured by group policy and cannot be modified";
             this.lbGPControlled.Visible = false;
@@ -212,15 +212,15 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(37, 164);
+            this.label4.Location = new System.Drawing.Point(37, 168);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(139, 13);
+            this.label4.Size = new System.Drawing.Size(398, 13);
             this.label4.TabIndex = 15;
-            this.label4.Text = "Custom warning message";
+            this.label4.Text = "Custom warning message (Use {0} as the placeholder for remaining seconds)";
             // 
             // txtWarningMessage
             // 
-            this.txtWarningMessage.Location = new System.Drawing.Point(40, 182);
+            this.txtWarningMessage.Location = new System.Drawing.Point(40, 189);
             this.txtWarningMessage.Name = "txtWarningMessage";
             this.txtWarningMessage.Size = new System.Drawing.Size(378, 22);
             this.txtWarningMessage.TabIndex = 16;
@@ -231,7 +231,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btCancel;
-            this.ClientSize = new System.Drawing.Size(434, 334);
+            this.ClientSize = new System.Drawing.Size(453, 334);
             this.Controls.Add(this.txtWarningMessage);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.ckShowWarning);
