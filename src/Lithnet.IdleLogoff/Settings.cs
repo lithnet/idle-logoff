@@ -340,7 +340,7 @@ namespace Lithnet.idlelogoff
 
                 if (string.IsNullOrWhiteSpace(value))
                 {
-                    return "Your session has been idle for too long, and you will be logged out in {0} seconds";
+                    return "Your session has been idle for too long, and you will be logged out in {0}";
                 }
                 else
                 {

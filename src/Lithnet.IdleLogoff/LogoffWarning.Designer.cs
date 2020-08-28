@@ -41,8 +41,7 @@
             this.lbWarning.Name = "lbWarning";
             this.lbWarning.Size = new System.Drawing.Size(431, 71);
             this.lbWarning.TabIndex = 0;
-            this.lbWarning.Text = "Your session has been idle for too long, and you will be logged out in {0} second" +
-    "s\r\n";
+            this.lbWarning.Text = "Your session has been idle for too long, and you will be logged out in {0}\r\n\r\n";
             // 
             // button1
             // 
@@ -67,7 +66,7 @@
             // LogoffWarning
             // 
             this.AcceptButton = this.button1;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.button1;
             this.ClientSize = new System.Drawing.Size(527, 163);

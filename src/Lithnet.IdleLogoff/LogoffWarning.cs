@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -58,13 +59,15 @@ namespace lithnet.idlelogoff
 
         private void UpdateLabelText()
         {
-            if (this.LogoffDateTime > DateTime.Now)
+            TimeSpan remaining = this.LogoffDateTime.Subtract(DateTime.Now);
+
+            if (remaining.Ticks > 0)
             {
                 string message = Settings.WarningMessage;
 
                 if (message.Contains("{0}"))
                 {
-                    message = string.Format(message, (int)((this.LogoffDateTime.Subtract(DateTime.Now)).TotalSeconds));
+                    message = string.Format(message, $"{(int)remaining.TotalMinutes}{CultureInfo.CurrentCulture.DateTimeFormat.TimeSeparator}{remaining.Seconds:00}");
                 }
 
                 this.lbWarning.Text = message;

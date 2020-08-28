@@ -54,7 +54,7 @@
             this.ckEnableIdleLogoff.AutoSize = true;
             this.ckEnableIdleLogoff.Location = new System.Drawing.Point(38, 35);
             this.ckEnableIdleLogoff.Name = "ckEnableIdleLogoff";
-            this.ckEnableIdleLogoff.Size = new System.Drawing.Size(118, 17);
+            this.ckEnableIdleLogoff.Size = new System.Drawing.Size(135, 23);
             this.ckEnableIdleLogoff.TabIndex = 0;
             this.ckEnableIdleLogoff.Text = "Enable idle logoff";
             this.ckEnableIdleLogoff.UseVisualStyleBackColor = true;
@@ -73,7 +73,7 @@
             0,
             0});
             this.udMinutes.Name = "udMinutes";
-            this.udMinutes.Size = new System.Drawing.Size(93, 22);
+            this.udMinutes.Size = new System.Drawing.Size(93, 26);
             this.udMinutes.TabIndex = 1;
             this.udMinutes.Value = new decimal(new int[] {
             60,
@@ -86,7 +86,7 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(35, 55);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(124, 13);
+            this.label1.Size = new System.Drawing.Size(148, 19);
             this.label1.TabIndex = 2;
             this.label1.Text = "Log off after (minutes):";
             // 
@@ -116,7 +116,7 @@
             this.lbProductName.AutoSize = true;
             this.lbProductName.Location = new System.Drawing.Point(8, 299);
             this.lbProductName.Name = "lbProductName";
-            this.lbProductName.Size = new System.Drawing.Size(99, 13);
+            this.lbProductName.Size = new System.Drawing.Size(116, 19);
             this.lbProductName.TabIndex = 4;
             this.lbProductName.Text = "Lithnet.IdleLogoff";
             // 
@@ -161,7 +161,7 @@
             this.cbAction.FormattingEnabled = true;
             this.cbAction.Location = new System.Drawing.Point(250, 76);
             this.cbAction.Name = "cbAction";
-            this.cbAction.Size = new System.Drawing.Size(166, 21);
+            this.cbAction.Size = new System.Drawing.Size(166, 27);
             this.cbAction.TabIndex = 10;
             // 
             // label2
@@ -169,7 +169,7 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(37, 79);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(40, 13);
+            this.label2.Size = new System.Drawing.Size(48, 19);
             this.label2.TabIndex = 11;
             this.label2.Text = "Action";
             // 
@@ -190,7 +190,7 @@
             0,
             0});
             this.udWarning.Name = "udWarning";
-            this.udWarning.Size = new System.Drawing.Size(93, 22);
+            this.udWarning.Size = new System.Drawing.Size(93, 26);
             this.udWarning.TabIndex = 12;
             this.udWarning.Value = new decimal(new int[] {
             60,
@@ -203,7 +203,7 @@
             this.ckShowWarning.AutoSize = true;
             this.ckShowWarning.Location = new System.Drawing.Point(38, 122);
             this.ckShowWarning.Name = "ckShowWarning";
-            this.ckShowWarning.Size = new System.Drawing.Size(251, 17);
+            this.ckShowWarning.Size = new System.Drawing.Size(294, 23);
             this.ckShowWarning.TabIndex = 14;
             this.ckShowWarning.Text = "Show a warning message before idle action";
             this.ckShowWarning.UseVisualStyleBackColor = true;
@@ -214,21 +214,21 @@
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(37, 168);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(398, 13);
+            this.label4.Size = new System.Drawing.Size(454, 19);
             this.label4.TabIndex = 15;
-            this.label4.Text = "Custom warning message (Use {0} as the placeholder for remaining seconds)";
+            this.label4.Text = "Custom warning message (Use {0} as the placeholder for remaining time)";
             // 
             // txtWarningMessage
             // 
             this.txtWarningMessage.Location = new System.Drawing.Point(40, 189);
             this.txtWarningMessage.Name = "txtWarningMessage";
-            this.txtWarningMessage.Size = new System.Drawing.Size(378, 22);
+            this.txtWarningMessage.Size = new System.Drawing.Size(378, 26);
             this.txtWarningMessage.TabIndex = 16;
             // 
             // FrmSettings
             // 
             this.AcceptButton = this.btOK;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btCancel;
             this.ClientSize = new System.Drawing.Size(453, 334);
