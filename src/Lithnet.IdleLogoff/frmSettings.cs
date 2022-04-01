@@ -56,7 +56,10 @@ namespace Lithnet.idlelogoff
             this.txtWarningMessage.Enabled = !Settings.IsSettingFromPolicy(nameof(Settings.WarningMessage));
             this.txtWarningMessage.Text = Settings.WarningMessage;
 
-            if (!this.udMinutes.Enabled | !this.ckEnableIdleLogoff.Enabled | !this.ckIgnoreDisplayRequested.Enabled | !this.udWarning.Enabled | !this.txtWarningMessage.Enabled | !this.ckShowWarning.Enabled)
+            this.ckWaitForInput.Enabled = !Settings.IsSettingFromPolicy(nameof(Settings.WaitForInitialInput));
+            this.ckWaitForInput.Checked = Settings.WaitForInitialInput;
+
+            if (!this.udMinutes.Enabled | !this.ckEnableIdleLogoff.Enabled | !this.ckIgnoreDisplayRequested.Enabled | !this.udWarning.Enabled | !this.txtWarningMessage.Enabled | !this.ckShowWarning.Enabled | !this.ckWaitForInput.Enabled)
             {
                 this.lbGPControlled.Visible = true;
             }
@@ -96,6 +99,11 @@ namespace Lithnet.idlelogoff
                     Settings.WarningPeriod = (int)this.udWarning.Value;
                 }
 
+                if (this.ckWaitForInput.Enabled)
+                {
+                    Settings.WaitForInitialInput = this.ckWaitForInput.Checked;
+                }
+
                 if (this.cbAction.Enabled)
                 {
                     Settings.Action = (IdleTimeoutAction)Enum.Parse(typeof(IdleTimeoutAction), (string)this.cbAction.SelectedItem, true);
@@ -131,9 +139,5 @@ namespace Lithnet.idlelogoff
             Environment.Exit(0);
         }
 
-        private void checkBox1_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
     }
 }

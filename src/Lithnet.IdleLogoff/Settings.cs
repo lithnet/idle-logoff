@@ -304,6 +304,35 @@ namespace Lithnet.idlelogoff
             set => Settings.SaveSetting("Enabled", Convert.ToInt32(value), RegistryValueKind.DWord);
         }
 
+        public static bool WaitForInitialInput
+        {
+            get
+            {
+                object value = null;
+                bool status = false;
+
+                value = Settings.GetPolicyOrSetting("WaitForInitialInput");
+                if (value != null)
+                {
+                    try
+                    {
+                        if ((int)value == 1)
+                        {
+                            status = true;
+                        }
+                    }
+                    catch
+                    {
+                        //unable to cast 
+                    }
+
+                }
+                return status;
+            }
+            set => Settings.SaveSetting("WaitForInitialInput", Convert.ToInt32(value), RegistryValueKind.DWord);
+        }
+
+
         public static bool WarningEnabled
         {
             get

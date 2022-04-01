@@ -10,6 +10,7 @@ namespace Lithnet.idlelogoff
     public static class Program
     {
         private static uint lastTicks;
+        private static uint startingTicks;
 
         private static readonly int idleCheckSeconds = 15;
 
@@ -61,6 +62,7 @@ namespace Lithnet.idlelogoff
                 EventLogging.TryLogEvent($"The application has started, but is not enabled. User {Environment.UserDomainName}\\{Environment.UserName} will not be logged off automatically", EventLogging.EvtTimerstarted);
             }
 
+            Program.startingTicks = NativeMethods.GetLastInputTime();
             Program.eventTimer = new Timer();
             Program.eventTimer.Tick += Program.EventTimer_Tick;
             Program.eventTimer.Interval = (int)TimeSpan.FromSeconds(Program.idleCheckSeconds).TotalMilliseconds;
@@ -88,8 +90,9 @@ namespace Lithnet.idlelogoff
                 }
                 else
                 {
-                    MessageBox.Show($"An invalid command line argument was specified: {arg}");
-                    Environment.Exit(1);
+                    Trace.WriteLine($"An invalid command line argument was specified: {arg}");
+                   // MessageBox.Show($"An invalid command line argument was specified: {arg}");
+                   // Environment.Exit(1);
                 }
             }
         }
@@ -115,6 +118,12 @@ namespace Lithnet.idlelogoff
                 if (!Settings.IgnoreDisplayRequested && NativeMethods.IsDisplayRequested())
                 {
                     Trace.WriteLine("An application has requested the system display stay on");
+                    Program.ResetIdleStatus(currentticks);
+                    return;
+                }
+                else if (Settings.WaitForInitialInput && currentticks == Program.startingTicks)
+                {
+                    Trace.WriteLine($"Initial input not yet received ({currentticks}=={Program.startingTicks})");
                     Program.ResetIdleStatus(currentticks);
                     return;
                 }

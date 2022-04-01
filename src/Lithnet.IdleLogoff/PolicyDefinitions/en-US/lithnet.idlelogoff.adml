@@ -10,7 +10,7 @@
       <string id="pol_show_warning_message">Show a warning message before logging off</string>
       <string id="pol_show_warning_message_help">Shows a pop up notification informing the user of the time remaining before they are logged off.
 
-        You can optionally provide a custom message to show the user. Use {0} as a placeholder for the remaining time until logoff.
+You can optionally provide a custom message to show the user. Use {0} as a placeholder for the remaining time until logoff.
       </string>
       <string id="string_logoff">Log off</string>
       <string id="string_reboot">Reboot</string>
@@ -28,8 +28,9 @@
       </presentation>
       <presentation id="pol_enable_idle_logoff">
         <decimalTextBox refId="txt_idle_limit" defaultValue="60">Idle timeout (minutes)</decimalTextBox>
-        <checkBox refId="ck_ignore_display_requested" defaultChecked="false">Ignore sleep prevention requests from applications such as media playback</checkBox>
-        <dropdownList refId="dd_idle_action" defaultItem ="0">Action</dropdownList>
+          <checkBox refId="ck_ignore_display_requested" defaultChecked="false">Ignore sleep prevention requests from applications such as media playback</checkBox>
+          <checkBox refId="ck_wait_for_input" defaultChecked="false">Wait for initial user interaction before starting idle timer (kiosk mode)</checkBox>
+          <dropdownList refId="dd_idle_action" defaultItem ="0">Action</dropdownList>
       </presentation>
     </presentationTable>
   </resources>

@@ -42,6 +42,14 @@
             <decimal value="0" />
           </falseValue>
         </boolean>
+        <boolean id="ck_wait_for_input" key="Software\Policies\Lithnet\IdleLogoff" valueName="WaitForInitialInput">
+            <trueValue>
+                <decimal value="1" />
+            </trueValue>
+            <falseValue>
+                <decimal value="0" />
+            </falseValue>
+        </boolean>
         <enum id="dd_idle_action" key="Software\Policies\Lithnet\IdleLogoff" valueName="Action">
           <item displayName="$(string.string_logoff)">
             <value>
