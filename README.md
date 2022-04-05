@@ -2,7 +2,7 @@
 # Lithnet Idle Logoff
 #### A group-policy enabled utility for logging off idle windows user sessions
 
-The Lithnet Idle Logoff tool is a simple utility that allows you to log off users after a period of inactivity. It was designed specifically with kiosk and student lab scenarios in mind. 
+The Lithnet Idle Logoff tool is a simple utility that allows you to log off users, reboot, or shutdown a computer after a period of user inactivity, and optionally display a warning message before this happens. It was designed specifically with kiosk and student lab scenarios in mind. 
 
 - The tool runs in the background of each user session when installed
 - It logs the user out after a preset period of inactivity
@@ -17,7 +17,7 @@ See the [wiki](https://github.com/lithnet/idle-logoff/wiki) for installation and
 * Found an issue and want us to fix it? [Log it](https://github.com/lithnet/idle-logoff/issues)
 * Want to fix an issue yourself or add functionality? Clone the project and submit a pull request
 
-## Enteprise support
+## Enterprise support
 Lithnet offer enterprise support plans for our open-source products. Deploy our tools with confidence that you have the backing of the dedicated Lithnet support team if you run into any issues, have questions, or need advice. Reach out to support@lithnet.io, let us know the number of devices you are running the product on, and we'll put together a quote.
 
 ## Keep up to date
