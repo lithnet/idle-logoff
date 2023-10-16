@@ -1,42 +1,44 @@
-<policyDefinitionResources revision="1.0" schemaVersion="1.0">
-  <displayName>
-  </displayName>
-  <description>
-  </description>
-  <resources>
-    <stringTable>
-      <string id="cat_idle_logoff">IdleLogoff</string>
-      <string id="pol_enable_idle_logoff">Log off inactive users</string>
-      <string id="pol_show_warning_message">Show a warning message before logging off</string>
-      <string id="pol_show_warning_message_help">Shows a pop up notification informing the user of the time remaining before they are logged off.
+<?xml version="1.0" encoding="utf-8"?>
+<policyDefinitionResources
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	revision="1.0"
+    schemaVersion="1.0"
+	xmlns="http://www.microsoft.com/GroupPolicy/PolicyDefinitions">
+
+	<displayName>
+	</displayName>
+	<description>
+	</description>
+	<resources>
+		<stringTable>
+			<string id="cat_idle_logoff">IdleLogoff</string>
+			<string id="pol_enable_idle_logoff">Log off inactive users</string>
+			<string id="pol_enable_idle_logoff_help">Enables the agent to log off inactive users</string>
+			<string id="pol_show_warning_message">Show a warning message before logging off</string>
+			<string id="pol_show_warning_message_help">Shows a pop up notification informing the user of the time remaining before they are logged off.
 
 You can optionally provide a custom message to show the user. Use {0} as a placeholder for the remaining time until logoff.
-      </string>
-      <string id="string_logoff">Log off</string>
-      <string id="string_reboot">Reboot</string>
-      <string id="string_shutdown">Shutdown</string>
-      <string id="SUPPORTED_WindowsVISTA">At least Microsoft Windows</string>
-      <string id="TS_SUPPORTED_WindowsXP">At least Microsoft Windows XP</string>
-    </stringTable>
-    <presentationTable>
-      <presentation id="pol_show_warning_message">
-        <decimalTextBox refId="txt_warning_period" defaultValue="0">Duration of warning message (seconds)</decimalTextBox>
-        <textBox refId="txt_warning_message">
-          <label>Warning message text</label>
-          <defaultValue>Your session has been idle for too long, and you will be logged out in {0}</defaultValue>
-        </textBox>
-      </presentation>
-      <presentation id="pol_enable_idle_logoff">
-        <decimalTextBox refId="txt_idle_limit" defaultValue="60">Idle timeout (minutes)</decimalTextBox>
-          <checkBox refId="ck_ignore_display_requested" defaultChecked="false">Ignore sleep prevention requests from applications such as media playback</checkBox>
-          <checkBox refId="ck_wait_for_input" defaultChecked="false">Wait for initial user interaction before starting idle timer (kiosk mode)</checkBox>
-          <dropdownList refId="dd_idle_action" defaultItem ="0">Action</dropdownList>
-      </presentation>
-    </presentationTable>
-  </resources>
+			</string>
+			<string id="string_logoff">Log off</string>
+			<string id="string_reboot">Reboot</string>
+			<string id="string_shutdown">Shutdown</string>
+			<string id="TS_SUPPORTED_WindowsXP">At least Microsoft Windows XP</string>
+		</stringTable>
+		<presentationTable>
+			<presentation id="pol_show_warning_message">
+				<decimalTextBox refId="txt_warning_period" defaultValue="0">Duration of warning message (seconds)</decimalTextBox>
+				<textBox refId="txt_warning_message">
+					<label>Warning message text</label>
+					<defaultValue>Your session has been idle for too long, and you will be logged out in {0}</defaultValue>
+				</textBox>
+			</presentation>
+			<presentation id="pol_enable_idle_logoff">
+				<decimalTextBox refId="txt_idle_limit" defaultValue="60">Idle timeout (minutes)</decimalTextBox>
+				<checkBox refId="ck_ignore_display_requested" defaultChecked="false">Ignore sleep prevention requests from applications such as media playback</checkBox>
+				<checkBox refId="ck_wait_for_input" defaultChecked="false">Wait for initial user interaction before starting idle timer (kiosk mode)</checkBox>
+				<dropdownList refId="dd_idle_action" defaultItem ="0">Action</dropdownList>
+			</presentation>
+		</presentationTable>
+	</resources>
 </policyDefinitionResources>
-
-<!--
-txt_warning_period
-DXT_8ab92f9f21e642dd9c343c1f185c8b4b
--->

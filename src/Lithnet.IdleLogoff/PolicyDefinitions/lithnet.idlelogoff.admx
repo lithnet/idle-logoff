@@ -1,73 +1,88 @@
-<policyDefinitions revision="1.0" schemaVersion="1.0">
-  <policyNamespaces>
-    <target prefix="LithnetIdleLogoff" namespace="Lithnet.IdleLogoff" />
-    <using prefix="windows" namespace="Microsoft.Policies.Windows" />
-    <using prefix="lithnet" namespace="Lithnet" />
-  </policyNamespaces>
-  <supersededAdm fileName="" />
-  <resources minRequiredRevision="1.0" />
-  <supportedOn>
-    <definitions>
-      <definition name="SUPPORTED_WindowsVISTA" displayName="$(string.SUPPORTED_WindowsVISTA)" />
-      <definition name="TS_SUPPORTED_WindowsXP" displayName="$(string.TS_SUPPORTED_WindowsXP)" />
-    </definitions>
-  </supportedOn>
-  <categories>
-    <category name="cat_idle_logoff" displayName="$(string.cat_idle_logoff)">
-      <parentCategory ref="lithnet:CAT_300017F2_090D_4E59_A535_01350C2E0428" />
-    </category>
-  </categories>
-  <policies>
+<?xml version="1.0" encoding="utf-8"?>
+<policyDefinitions
+	xmlns="http://www.microsoft.com/GroupPolicy/PolicyDefinitions"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	revision="1.0"
+	schemaVersion="1.0">
+	<policyNamespaces>
+		<target prefix="LithnetIdleLogoff" namespace="Lithnet.IdleLogoff" />
+		<using prefix="lithnet" namespace="Lithnet" />
+	</policyNamespaces>
+	<supersededAdm fileName="" />
+	<resources minRequiredRevision="1.0" />
+	<supportedOn>
+		<definitions>
+			<definition name="TS_SUPPORTED_WindowsXP" displayName="$(string.TS_SUPPORTED_WindowsXP)" />
+		</definitions>
+	</supportedOn>
+	<categories>
+		<category name="cat_idle_logoff" displayName="$(string.cat_idle_logoff)">
+			<parentCategory ref="lithnet:CAT_300017F2_090D_4E59_A535_01350C2E0428" />
+		</category>
+	</categories>
+	<policies>
 
+		<policy name="pol_show_warning_message"
+				class="Both"
+				displayName="$(string.pol_show_warning_message)"
+				presentation="$(presentation.pol_show_warning_message)"
+				key="Software\Policies\Lithnet\IdleLogoff"
+				valueName="WarningEnabled"
+				explainText="$(string.pol_show_warning_message_help)">
+			<parentCategory ref="cat_idle_logoff" />
+			<supportedOn ref="TS_SUPPORTED_WindowsXP" />
+			<elements>
+				<decimal id="txt_warning_period" key="Software\Policies\Lithnet\IdleLogoff" valueName="WarningPeriod" minValue="10" />
+				<text id="txt_warning_message" key="Software\Policies\Lithnet\IdleLogoff" valueName="WarningMessage" required="false"/>
+			</elements>
+		</policy>
 
-    <policy name="pol_show_warning_message" class="Both" displayName="$(string.pol_show_warning_message)" presentation="$(presentation.pol_show_warning_message)" key="Software\Policies\Lithnet\IdleLogoff" valueName="WarningEnabled" explainText="$(string.pol_show_warning_message_help)">
-      <parentCategory ref="cat_idle_logoff" />
-      <supportedOn ref="TS_SUPPORTED_WindowsXP" />
-      <elements>
-        <decimal id="txt_warning_period" key="Software\Policies\Lithnet\IdleLogoff" valueName="WarningPeriod" minValue="10" />
-        <text id="txt_warning_message" key="Software\Policies\Lithnet\IdleLogoff" valueName="WarningMessage" required="false"/>
-      </elements>
-    </policy>
-
-    <policy name="pol_enable_idle_logoff" class="Both" displayName="$(string.pol_enable_idle_logoff)" presentation="$(presentation.pol_enable_idle_logoff)" key="Software\Policies\Lithnet\IdleLogoff" valueName="Enabled">
-      <parentCategory ref="cat_idle_logoff" />
-      <supportedOn ref="TS_SUPPORTED_WindowsXP" />
-      <elements>
-        <decimal id="txt_idle_limit" key="Software\Policies\Lithnet\IdleLogoff" valueName="IdleLimit" minValue="1" />
-        <boolean id="ck_ignore_display_requested" key="Software\Policies\Lithnet\IdleLogoff" valueName="IgnoreDisplayRequested">
-          <trueValue>
-            <decimal value="1" />
-          </trueValue>
-          <falseValue>
-            <decimal value="0" />
-          </falseValue>
-        </boolean>
-        <boolean id="ck_wait_for_input" key="Software\Policies\Lithnet\IdleLogoff" valueName="WaitForInitialInput">
-            <trueValue>
-                <decimal value="1" />
-            </trueValue>
-            <falseValue>
-                <decimal value="0" />
-            </falseValue>
-        </boolean>
-        <enum id="dd_idle_action" key="Software\Policies\Lithnet\IdleLogoff" valueName="Action">
-          <item displayName="$(string.string_logoff)">
-            <value>
-              <decimal value="0" />
-            </value>
-          </item>
-          <item displayName="$(string.string_reboot)">
-            <value>
-              <decimal value="1" />
-            </value>
-          </item>
-          <item displayName="$(string.string_shutdown)">
-            <value>
-              <decimal value="2" />
-            </value>
-          </item>
-        </enum>
-      </elements>
-    </policy>
-  </policies>
+		<policy name="pol_enable_idle_logoff" 
+				class="Both" 
+				displayName="$(string.pol_enable_idle_logoff)" 
+				presentation="$(presentation.pol_enable_idle_logoff)" 
+				key="Software\Policies\Lithnet\IdleLogoff" 
+				valueName="Enabled"
+				explainText="$(string.pol_enable_idle_logoff_help)">
+			<parentCategory ref="cat_idle_logoff" />
+			<supportedOn ref="TS_SUPPORTED_WindowsXP" />
+			<elements>
+				<decimal id="txt_idle_limit" key="Software\Policies\Lithnet\IdleLogoff" valueName="IdleLimit" minValue="1" />
+				<boolean id="ck_ignore_display_requested" key="Software\Policies\Lithnet\IdleLogoff" valueName="IgnoreDisplayRequested">
+					<trueValue>
+						<decimal value="1" />
+					</trueValue>
+					<falseValue>
+						<decimal value="0" />
+					</falseValue>
+				</boolean>
+				<boolean id="ck_wait_for_input" key="Software\Policies\Lithnet\IdleLogoff" valueName="WaitForInitialInput">
+					<trueValue>
+						<decimal value="1" />
+					</trueValue>
+					<falseValue>
+						<decimal value="0" />
+					</falseValue>
+				</boolean>
+				<enum id="dd_idle_action" key="Software\Policies\Lithnet\IdleLogoff" valueName="Action">
+					<item displayName="$(string.string_logoff)">
+						<value>
+							<decimal value="0" />
+						</value>
+					</item>
+					<item displayName="$(string.string_reboot)">
+						<value>
+							<decimal value="1" />
+						</value>
+					</item>
+					<item displayName="$(string.string_shutdown)">
+						<value>
+							<decimal value="2" />
+						</value>
+					</item>
+				</enum>
+			</elements>
+		</policy>
+	</policies>
 </policyDefinitions>
